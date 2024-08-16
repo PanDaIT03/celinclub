@@ -117,19 +117,17 @@ const Home = () => {
 
   useEffect(() => {
     const fieldsValue = {
-      retailerAddress: 'Nhà máy/ Factory',
+      officeLocation: 'Nhà máy/ Factory',
     };
 
     form.setFieldsValue(fieldsValue);
     dispatch(getStimulusProducts());
   }, []);
 
-  console.log(data);
-
   useEffect(() => {
     const options: DefaultOptionType[] = data.map((item) => ({
       label: item.name,
-      value: item.name,
+      value: item.id,
     }));
 
     setProductOptions(options);
@@ -242,7 +240,7 @@ const Home = () => {
         ),
       },
     ];
-  }, [fileList]);
+  }, [fileList, form, productOptions]);
 
   const handleSubmit = (values: IRetailVisit) => {
     dispatch(

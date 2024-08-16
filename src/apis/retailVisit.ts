@@ -4,7 +4,7 @@ import {
   getDownloadURL,
   getStorage,
   ref,
-  uploadBytesResumable
+  uploadBytesResumable,
 } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
