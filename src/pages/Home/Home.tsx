@@ -1,3 +1,4 @@
+import { Rule } from 'antd/es/form';
 import {
   Checkbox,
   Col,
@@ -7,6 +8,7 @@ import {
   Input,
   InputProps,
   Row,
+  Tooltip,
 } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
@@ -38,11 +40,13 @@ import { uploadRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { icons } from 'utils/constants/icons';
+import { inputNumberPatern } from 'utils/constants/constants';
 
 type InputFormProps = {
   label: string;
   message?: string;
   component?: ReactNode;
+  customeRules?: Rule[];
 } & InputProps;
 
 const addressOptions: DefaultOptionType[] = [
@@ -155,8 +159,14 @@ const Home = () => {
       {
         required: true,
         name: 'phoneNumber',
-        message: 'Nhập họ và tên nhân viên',
-        label: 'Số điện thoại di động của nhân viên / Số ĐTDĐ của nhân viên',
+        message: 'Nhập số điện thoại nhân viên',
+        label: 'Số điện thoại di động của nhân viên',
+        customeRules: [
+          {
+            pattern: inputNumberPatern,
+            message: 'Số điện thoại không hợp lệ. Hãy nhập 10 chữ số',
+          },
+        ],
       },
       {
         name: 'officeLocation',
@@ -173,11 +183,17 @@ const Home = () => {
         required: true,
         name: 'retailerPhoneNumber',
         label: 'Số liên hệ nhà bán lẻ / Số ĐT của nhà bán lẻ',
-        message: 'Nhập Số liên hệ nhà bán lẻ / / Số ĐT của nhà bán lẻ',
+        message: 'Nhập Số liên hệ / Số ĐT của nhà bán lẻ',
+        customeRules: [
+          {
+            pattern: inputNumberPatern,
+            message: 'Số điện thoại không hợp lệ. Hãy nhập 10 chữ số',
+          },
+        ],
       },
       {
         name: 'retailerAddress',
-        label: 'Khu vực bán lẻ/Quận/Địa chỉ nhà bán lẻ',
+        label: 'Khu vực / Quận / Địa chỉ nhà bán lẻ',
       },
       {
         required: true,
@@ -224,8 +240,8 @@ const Home = () => {
             multiple={true}
             fileList={fileList}
             accept="image/png, image/jpeg"
-            beforeUpload={handleBeforeUpload}
             onChange={handleChange}
+            beforeUpload={handleBeforeUpload}
           >
             <p className="ant-upload-drag-icon">
               <CloudUploadOutlined />
@@ -285,7 +301,10 @@ const Home = () => {
                   name={name}
                   label={label}
                   labelCol={{ span: 24 }}
-                  rules={[{ required: required, message: message }]}
+                  rules={[
+                    { required: required, message: message },
+                    ...(input.customeRules || []),
+                  ]}
                 >
                   {component ? component : <Input name={name} />}
                 </Form.Item>
