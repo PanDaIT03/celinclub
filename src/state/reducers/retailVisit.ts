@@ -7,13 +7,21 @@ const initialState: IInitialState = {
   loading: false,
 };
 
+type IUploadRetailVisit = {
+  onSuccess?: () => void;
+} & IRetailVisit;
+
 export const uploadRetailVisit = createAsyncThunk(
   'uploadRetailVisit',
-  async (data: IRetailVisit) => {
+  async (data: IUploadRetailVisit) => {
     const result = await RetailVisitApis.uploadRetailVisit(data);
 
     if (result?.id) {
+      const { onSuccess } = data;
+
       toast.success('Cập nhật kết quả viếng thăm thành công!');
+      onSuccess && onSuccess();
+
       return;
     }
   },
