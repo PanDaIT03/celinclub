@@ -1,11 +1,6 @@
 import { UploadFile } from 'antd';
 import { addDoc, collection } from 'firebase/firestore';
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
 import { toast } from 'config/toast';
@@ -33,31 +28,22 @@ export const RetailVisitApis = {
               `uploads/retail-visit/${file.name}`,
             );
 
-            const upload = await uploadBytesResumable(
-              storageRef,
-              file.originFileObj,
-            );
+            try {
+              const uploadResult = await uploadBytes(
+                storageRef,
+                file.originFileObj,
+              );
 
-            upload.task.on(
-              'state_changed',
-              (snapshot) => console.log(snapshot),
-              (error) =>
-                toast.error(
-                  `Upload hình ảnh không thành công. ${error.message}`,
-                ),
-              () =>
-                getDownloadURL(upload.task.snapshot.ref).then((downloadURL) => {
-                  urls.push(downloadURL);
-                }),
-            );
+              urls.push(await getDownloadURL(uploadResult.ref));
+            } catch (error) {
+              toast.error(`Đã xảy ra lỗi trong quá trình upload ảnh: ${error}`);
+            }
           }),
         );
 
+      await uploadPhotos(upload.fileList);
+
       try {
-        await uploadPhotos(upload.fileList);
-
-        console.log({ ...others, imageUrls: urls });
-
         const entity = await addDoc(
           collection(firestoreDatabase, 'retailVisit'),
           { ...others, imageUrls: urls },
@@ -65,10 +51,14 @@ export const RetailVisitApis = {
 
         return entity;
       } catch (error) {
-        toast.error(`Upload ảnh thất bại. ${error}`);
+        toast.error(
+          `Đã xảy ra lỗi. Cập nhật kết quả viếng thăm thất bại. ${error}`,
+        );
       }
     } catch (error: any) {
-      toast.error(`Cập nhật kết quả viếng thăm thất bại. ${error}`);
+      toast.error(
+        `Đã xảy ra lỗi. Cập nhật kết quả viếng thăm thất bại. ${error}`,
+      );
       return undefined;
     }
   },

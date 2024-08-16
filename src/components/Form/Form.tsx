@@ -7,10 +7,17 @@ interface IProps {
   children: ReactNode;
   className?: string;
   form: FormInstance<any>;
+  isSubmitting?: boolean;
   onFinish(values: any): void;
 }
 
-const FormComp = ({ form, children, className = '', onFinish }: IProps) => {
+const FormComp = ({
+  form,
+  children,
+  className = '',
+  isSubmitting = false,
+  onFinish,
+}: IProps) => {
   const customeClass = classNames(
     'p-2.5 border-2 border-[#94CBFF] mt-5',
     className,
@@ -21,7 +28,9 @@ const FormComp = ({ form, children, className = '', onFinish }: IProps) => {
       <div className="px-[15px]">
         {children}
         <Row>
-          <Button htmlType="submit">Gửi</Button>
+          <Button htmlType="submit" disabled={isSubmitting}>
+            Gửi
+          </Button>
         </Row>
       </div>
     </Form>
