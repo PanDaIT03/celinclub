@@ -1,0 +1,3 @@
+interface IInitialState {
+  loading: boolean;
+}

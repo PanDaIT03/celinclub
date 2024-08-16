@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import { StimulusProductApis } from 'apis/stimulusProduct';
 
-interface IStimulusProductInitialSate {
+type IStimulusProductInitialSate = {
   data: IStimulusProduct[];
-  loading: boolean;
-}
+} & IInitialState;
 
 const initialState: IStimulusProductInitialSate = {
   data: [],
