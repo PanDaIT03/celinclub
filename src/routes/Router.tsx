@@ -11,7 +11,7 @@ const Router = () => {
       element: <ProtectedRoute />,
       children: [
         {
-          path: `${path.HOME}`,
+          path: ``,
           element: <Home />,
         },
       ],

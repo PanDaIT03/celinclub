@@ -1,6 +1,6 @@
 const path = {
   ROOT: '/',
-  HOME: '/home',
+  // HOME: '/home',
 };
 
 export default path;
