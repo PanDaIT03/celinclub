@@ -17,7 +17,19 @@ const FormComp = ({ form, children, className = '', onFinish }: IProps) => {
   );
 
   return (
-    <Form form={form} className={customeClass} onFinish={onFinish}>
+    <Form
+      form={form}
+      className={customeClass}
+      onFinish={onFinish}
+      onFinishFailed={({ errorFields }) => {
+        if (errorFields.length > 0) {
+          form.scrollToField(errorFields[0].name, {
+            behavior: 'smooth',
+            block: 'center',
+          });
+        }
+      }}
+    >
       <div className="px-[15px]">
         {children}
         <Row>
