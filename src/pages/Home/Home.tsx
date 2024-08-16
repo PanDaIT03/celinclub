@@ -7,18 +7,21 @@ import {
   Input,
   InputProps,
   Row,
-  UploadProps,
 } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
-import { ReactNode, useMemo } from 'react';
+import { UploadChangeParam, UploadFile } from 'antd/es/upload';
+import Dragger from 'antd/es/upload/Dragger';
+import dayjs from 'dayjs';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { Freepik_Br, Star_Benko } from 'assets/images';
+import FormComp from 'components/Form/Form';
 import Select from 'components/Select/Select';
 import Banner from 'layouts/Banner';
-import Dragger from 'antd/es/upload/Dragger';
+import { uploadRetailVisit } from 'state/reducers/retailVisit';
+import { useAppDispatch } from 'state/store';
 import { icons } from 'utils/constants/icons';
-import FormComp from 'components/Form/Form';
 
 type InputFormProps = {
   label: string;
@@ -56,31 +59,25 @@ const brandOptions: DefaultOptionType[] = [
   { label: 'amip', value: 'amip' },
 ];
 
-const props: UploadProps = {
-  name: 'file',
-  multiple: true,
-  action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
-  onChange(info: any) {
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (status === 'done') {
-      // message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === 'error') {
-      // message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e: any) {
-    console.log('Dropped files', e.dataTransfer.files);
-  },
-};
-
 const { TextArea } = Input,
   { CloudUploadOutlined } = icons;
 
 const Home = () => {
+  const dispatch = useAppDispatch();
   const [form] = useForm();
+
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
+
+  const handleBeforeUpload = useCallback(() => {
+    return false;
+  }, []);
+
+  const handleChange = useCallback(
+    ({ fileList }: UploadChangeParam<UploadFile<any>>) => {
+      setFileList(fileList);
+    },
+    [],
+  );
 
   const inputs: InputFormProps[] = useMemo(() => {
     return [
@@ -92,12 +89,12 @@ const Home = () => {
       },
       {
         required: true,
-        name: 'numberPhone',
+        name: 'phoneNumber',
         message: 'Nhập họ và tên nhân viên',
         label: 'Số điện thoại di động của nhân viên / Số ĐTDĐ của nhân viên',
       },
       {
-        name: 'address',
+        name: 'officeLocation',
         label: 'Địa chỉ văn phòng / Nơi làm việc',
         component: <Select options={addressOptions} />,
       },
@@ -109,18 +106,18 @@ const Home = () => {
       },
       {
         required: true,
-        name: 'retailerPhone',
+        name: 'retailerPhoneNumber',
         label: 'Số liên hệ nhà bán lẻ / Số ĐT của nhà bán lẻ',
         message: 'Nhập Số liên hệ nhà bán lẻ / / Số ĐT của nhà bán lẻ',
       },
       {
-        name: 'retailerAdress',
+        name: 'retailerAddress',
         label: 'Khu vực bán lẻ/Quận/Địa chỉ nhà bán lẻ',
       },
       {
         required: true,
         label: 'Ngày thăm',
-        name: 'visitingDate',
+        name: 'visitDate',
         message: 'Chọn ngày thăm',
         component: (
           <DatePicker
@@ -132,7 +129,7 @@ const Home = () => {
         ),
       },
       {
-        name: 'brand',
+        name: 'stimulusProductIds',
         label: 'Thương hiệu có sẵn / Sản phẩm kích cầu',
         component: (
           <Checkbox.Group className="w-full">
@@ -157,7 +154,14 @@ const Home = () => {
         message: 'Hãy tải ảnh của bạn',
         label: 'Upload Retailer Photo / Tải ảnh NT, hóa đơn, SP đã mua',
         component: (
-          <Dragger {...props}>
+          <Dragger
+            name={'file'}
+            multiple={true}
+            fileList={fileList}
+            accept="image/png, image/jpeg"
+            beforeUpload={handleBeforeUpload}
+            onChange={handleChange}
+          >
             <p className="ant-upload-drag-icon">
               <CloudUploadOutlined />
             </p>
@@ -171,10 +175,15 @@ const Home = () => {
         ),
       },
     ];
-  }, []);
+  }, [fileList]);
 
-  const handleSubmit = (values: any) => {
-    console.log(values);
+  const handleSubmit = (values: IRetailVisit) => {
+    dispatch(
+      uploadRetailVisit({
+        ...values,
+        visitDate: dayjs(values.visitDate).format('DD/MM/YYYY'),
+      }),
+    );
   };
 
   return (

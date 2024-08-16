@@ -1,10 +1,12 @@
 interface IRetailVisit {
   fullName: string;
   phoneNumber: string;
-  officeLocation?: string;
+  officeLocation: string;
   retailerName: string;
   retailerPhoneNumber: string;
-  retailerArea?: string;
+  retailerAddress?: string;
   visitDate: string;
   stimulusProductIds: string[];
+  feedback: string;
+  upload: { file: any; fileList: UploadFile<any>[] };
 }
