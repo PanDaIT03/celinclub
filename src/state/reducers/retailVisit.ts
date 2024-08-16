@@ -14,11 +14,10 @@ type IUploadRetailVisit = {
 export const uploadRetailVisit = createAsyncThunk(
   'uploadRetailVisit',
   async (data: IUploadRetailVisit) => {
-    const result = await RetailVisitApis.uploadRetailVisit(data);
+    const { onSuccess, ...others } = data;
+    const result = await RetailVisitApis.uploadRetailVisit(others);
 
     if (result?.id) {
-      const { onSuccess } = data;
-
       toast.success('Cập nhật kết quả viếng thăm thành công!');
       onSuccess && onSuccess();
 
