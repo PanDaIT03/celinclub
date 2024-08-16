@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useEffect, useMemo } from 'react';
 
 import Dragger from 'antd/es/upload/Dragger';
 import {
@@ -33,6 +33,8 @@ import Select from 'components/Select/Select';
 import Banner from 'layouts/Banner';
 import { icons } from 'utils/constants/icons';
 import BackToTop from 'components/BackToTop/BackToTop';
+import { IFormRetail } from 'interface/Home';
+import dayjs from 'dayjs';
 
 type InputFormProps = {
   label: string;
@@ -43,15 +45,15 @@ type InputFormProps = {
 const addressOptions: DefaultOptionType[] = [
   {
     label: 'Nhà máy/ Factory',
-    value: 'factory',
+    value: 'Nhà máy/ Factory',
   },
   {
-    label: 'Văn phòng HCM',
-    value: 'HCM Office',
+    label: 'Văn phòng HCM/ HCM Office',
+    value: 'Văn phòng HCM/ HCM Office',
   },
   {
-    label: 'Văn phòng HN',
-    value: 'HN Office',
+    label: 'Văn phòng HN/ HN Office​',
+    value: 'Văn phòng HN/ HN Office​',
   },
 ];
 
@@ -137,7 +139,15 @@ const { TextArea } = Input,
   { CloudUploadOutlined } = icons;
 
 const Home = () => {
-  const [form] = useForm();
+  const [form] = useForm<IFormRetail>();
+
+  useEffect(() => {
+    const fieldsValue = {
+      address: 'Nhà máy/ Factory',
+    };
+
+    form.setFieldsValue(fieldsValue);
+  }, []);
 
   const inputs: InputFormProps[] = useMemo(() => {
     return [
@@ -156,7 +166,7 @@ const Home = () => {
       {
         name: 'address',
         label: 'Địa chỉ văn phòng / Nơi làm việc',
-        component: <Select options={addressOptions} />,
+        component: <Select allowClear={false} options={addressOptions} />,
       },
       {
         required: true,
@@ -189,7 +199,7 @@ const Home = () => {
         ),
       },
       {
-        name: 'brand',
+        name: 'brands',
         label: 'Thương hiệu có sẵn / Sản phẩm kích cầu',
         component: (
           <Checkbox.Group className="w-full">
@@ -209,7 +219,7 @@ const Home = () => {
         component: <TextArea rows={4} />,
       },
       {
-        required: true,
+        // required: true,
         name: 'upload',
         message: 'Hãy tải ảnh của bạn',
         label: 'Upload Retailer Photo / Tải ảnh NT, hóa đơn, SP đã mua',
@@ -230,8 +240,12 @@ const Home = () => {
     ];
   }, []);
 
-  const handleSubmit = (values: any) => {
-    console.log(values);
+  const handleSubmit = (values: IFormRetail) => {
+    const formatedValues: IFormRetail = {
+      ...values,
+      visitingDate: dayjs(values.visitingDate).format('DD/MM/YYYY'),
+    };
+    console.log(formatedValues);
   };
 
   return (
@@ -252,8 +266,8 @@ const Home = () => {
           </Row>
           <FormComp
             form={form}
-            className="p-2.5 border-2 border-[#94CBFF] mt-5"
             onFinish={handleSubmit}
+            className="mt-5 p-2.5 border-2 border-[#94CBFF] rounded-md"
           >
             {inputs.map((input, index) => {
               const { name, label, required, message, component } = input;
