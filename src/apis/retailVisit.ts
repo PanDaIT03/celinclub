@@ -1,17 +1,51 @@
+import { UploadFile } from 'antd';
 import { addDoc, collection } from 'firebase/firestore';
+import { getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
+import { toast } from 'config/toast';
 
 export const RetailVisitApis = {
   uploadRetailVisit: async (data: IRetailVisit) => {
     try {
-      const entity = await addDoc(
-        collection(firestoreDatabase, 'retailVisit'),
-        data,
-      );
-      return entity;
-    } catch (error) {
-      console.log(error);
+      const { upload, ...others } = data;
+
+      for (const key in others) {
+        const currentKey = key as keyof Omit<IRetailVisit, 'upload'>;
+        if (others[currentKey] === undefined) delete others[currentKey];
+      }
+
+      const storage = getStorage();
+
+      const uploadPhotos = async (files: UploadFile<any>[]) =>
+        Promise.all(
+          files.map((file) => {
+            if (!file.originFileObj) return;
+
+            const storageRef = ref(
+              storage,
+              `uploads/retail-visit/${file.name}`,
+            );
+            uploadBytesResumable(storageRef, file.originFileObj);
+          }),
+        );
+
+      try {
+        await uploadPhotos(upload.fileList);
+
+        console.log(others);
+
+        const entity = await addDoc(
+          collection(firestoreDatabase, 'retailVisit'),
+          others,
+        );
+
+        return entity;
+      } catch (error) {
+        toast.error(`Upload ảnh thất bại. ${error}`);
+      }
+    } catch (error: any) {
+      toast.error(`Cập nhật kết quả viếng thăm thất bại. ${error}`);
       return undefined;
     }
   },
