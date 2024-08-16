@@ -1,7 +1,9 @@
 import { Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 
-import { HeaderLogo, UK_Flag, VI_Flag } from 'assets/images';
+import { HeaderLogo } from 'assets/images';
+import { EN_Flag, VI_Flag } from 'assets/svg';
+import Icon from 'components/Icon/Icon';
 
 const MainHeader = () => {
   return (
@@ -16,11 +18,11 @@ const MainHeader = () => {
         </Col>
         <Col className="fixed flex items-start gap-2 top-[15px] right-[15px] z-50">
           <div className="leading-6 flex gap-[5px] justify-center items-center cursor-pointer">
-            <Image preview={false} width={24} height={18} src={UK_Flag} />
+            <Icon svgIcon={<EN_Flag />} />
             <span>EN</span>
           </div>
           <div className="leading-6 flex gap-[5px] justify-center items-center cursor-pointer">
-            <Image preview={false} width={24} height={18} src={VI_Flag} />
+            <Icon svgIcon={<VI_Flag />} />
             <span>VI</span>
           </div>
         </Col>
