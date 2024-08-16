@@ -33,8 +33,10 @@ import BackToTop from 'components/BackToTop/BackToTop';
 import FormComp from 'components/Form/Form';
 import Select from 'components/Select/Select';
 import Banner from 'layouts/Banner';
+import { useSelector } from 'react-redux';
 import { uploadRetailVisit } from 'state/reducers/retailVisit';
-import { useAppDispatch } from 'state/store';
+import { getStimulusProducts } from 'state/reducers/stimulusProduct';
+import { RootState, useAppDispatch } from 'state/store';
 import { icons } from 'utils/constants/icons';
 
 type InputFormProps = {
@@ -101,21 +103,6 @@ const images = [
   },
 ];
 
-const brandOptions: DefaultOptionType[] = [
-  { label: 'STAR Đau họng (xanh lá)', value: 'STAR Đau họng (xanh lá)' },
-  { label: 'Giảm ho STAR (cam)', value: 'Giảm ho STAR (cam)' },
-  { label: 'Dizzo Hiệu quả. (Sủi)', value: 'Dizzo Hiệu quả. (Sủi)' },
-  { label: 'canxilife', value: 'canxilife' },
-  { label: 'Ameflu DT+C', value: 'Ameflu DT+C' },
-  { label: 'Gói Tydol', value: 'Gói Tydol' },
-  { label: 'Xi-rô cây thường xuân STAR', value: 'Xi-rô cây thường xuân STAR' },
-  { label: 'Nhai chóng mặt', value: 'Nhai chóng mặt' },
-  { label: 'Dizzo Lacto', value: 'Dizzo Lacto' },
-  { label: 'Centovit', value: 'Centovit' },
-  { label: 'Tydol Nữ', value: 'Tydol Nữ' },
-  { label: 'amip', value: 'amip' },
-];
-
 const { TextArea } = Input,
   { CloudUploadOutlined } = icons;
 
@@ -124,6 +111,9 @@ const Home = () => {
   const [form] = useForm<IRetailVisit>();
 
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
+  const { data } = useSelector((state: RootState) => state.stimulusProduct);
+
+  const [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
 
   useEffect(() => {
     const fieldsValue = {
@@ -131,7 +121,19 @@ const Home = () => {
     };
 
     form.setFieldsValue(fieldsValue);
+    dispatch(getStimulusProducts());
   }, []);
+
+  console.log(data);
+
+  useEffect(() => {
+    const options: DefaultOptionType[] = data.map((item) => ({
+      label: item.name,
+      value: item.name,
+    }));
+
+    setProductOptions(options);
+  }, [data]);
 
   const handleBeforeUpload = useCallback(() => {
     return false;
@@ -199,7 +201,7 @@ const Home = () => {
         component: (
           <Checkbox.Group className="w-full">
             <Row gutter={[8, 16]}>
-              {brandOptions.map((brand, index) => (
+              {productOptions.map((brand, index) => (
                 <Col key={index} span={12}>
                   <Checkbox value={brand.value}>{brand.label}</Checkbox>
                 </Col>
@@ -214,7 +216,7 @@ const Home = () => {
         component: <TextArea rows={4} />,
       },
       {
-        // required: true,
+        required: true,
         name: 'upload',
         message: 'Hãy tải ảnh của bạn',
         label: 'Upload Retailer Photo / Tải ảnh NT, hóa đơn, SP đã mua',
