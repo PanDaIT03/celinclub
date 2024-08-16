@@ -1,5 +1,6 @@
 import { Button, Form, Row } from 'antd';
 import { FormInstance } from 'antd/es/form';
+import { InternalNamePath } from 'antd/es/form/interface';
 import classNames from 'classnames';
 import { ReactNode } from 'react';
 
@@ -9,6 +10,16 @@ interface IProps {
   form: FormInstance<any>;
   isSubmitting?: boolean;
   onFinish(values: any): void;
+}
+
+interface IErrorFields {
+  name: InternalNamePath;
+  errors: string[];
+}
+
+interface IErrorFields {
+  name: InternalNamePath;
+  errors: string[];
 }
 
 const FormComp = ({
@@ -23,8 +34,22 @@ const FormComp = ({
     className,
   );
 
+  const handleFinishFailed = (errorFields: IErrorFields[]) => {
+    if (!errorFields.length) return;
+
+    form.scrollToField(errorFields[0].name, {
+      behavior: 'smooth',
+      block: 'center',
+    });
+  };
+
   return (
-    <Form form={form} className={customeClass} onFinish={onFinish}>
+    <Form
+      form={form}
+      className={customeClass}
+      onFinish={onFinish}
+      onFinishFailed={({ errorFields }) => handleFinishFailed(errorFields)}
+    >
       <div className="px-[15px]">
         {children}
         <Row>

@@ -14,7 +14,7 @@ const MainHeader = () => {
             className="max-w-[500px] max-h-[157px] object-contain"
           />
         </Col>
-        <Col className="fixed flex items-start gap-2 top-[15px] right-[15px]">
+        <Col className="fixed flex items-start gap-2 top-[15px] right-[15px] z-50">
           <div className="leading-6 flex gap-[5px] justify-center items-center cursor-pointer">
             <Image preview={false} width={24} height={18} src={UK_Flag} />
             <span>EN</span>
