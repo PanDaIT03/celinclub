@@ -32,7 +32,6 @@ import {
 import BackToTop from 'components/BackToTop/BackToTop';
 import FormComp from 'components/Form/Form';
 import Select from 'components/Select/Select';
-import { IFormRetail } from 'interface/Home';
 import Banner from 'layouts/Banner';
 import { uploadRetailVisit } from 'state/reducers/retailVisit';
 import { useAppDispatch } from 'state/store';
@@ -122,13 +121,13 @@ const { TextArea } = Input,
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const [form] = useForm<IFormRetail>();
+  const [form] = useForm<IRetailVisit>();
 
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
 
   useEffect(() => {
     const fieldsValue = {
-      address: 'Nhà máy/ Factory',
+      retailerAddress: 'Nhà máy/ Factory',
     };
 
     form.setFieldsValue(fieldsValue);
