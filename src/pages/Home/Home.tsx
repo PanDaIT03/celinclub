@@ -263,6 +263,10 @@ const Home = () => {
       uploadRetailVisit({
         ...values,
         visitDate: dayjs(values.visitDate).format('DD/MM/YYYY'),
+        onSuccess: () => {
+          setFileList([]);
+          form.resetFields();
+        },
       }),
     );
   };
