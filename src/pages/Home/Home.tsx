@@ -13,14 +13,30 @@ import { DefaultOptionType } from 'antd/es/select';
 import { UploadChangeParam, UploadFile } from 'antd/es/upload';
 import Dragger from 'antd/es/upload/Dragger';
 import dayjs from 'dayjs';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Freepik_Br, Star_Benko } from 'assets/images';
+import {
+  Ame_Bismo,
+  Ameflu_Green,
+  Ameflu_Orange,
+  Calci_Life,
+  Centovit,
+  Dizzo,
+  Rewards,
+  Star_Brown,
+  Star_Dark_Blue,
+  Star_Green,
+  Tydol_Women,
+  VN_Brand_Banner_3,
+} from 'assets/images';
+import BackToTop from 'components/BackToTop/BackToTop';
 import FormComp from 'components/Form/Form';
 import Select from 'components/Select/Select';
 import Banner from 'layouts/Banner';
+import { useSelector } from 'react-redux';
 import { uploadRetailVisit } from 'state/reducers/retailVisit';
-import { useAppDispatch } from 'state/store';
+import { getStimulusProducts } from 'state/reducers/stimulusProduct';
+import { RootState, useAppDispatch } from 'state/store';
 import { icons } from 'utils/constants/icons';
 
 type InputFormProps = {
@@ -32,31 +48,59 @@ type InputFormProps = {
 const addressOptions: DefaultOptionType[] = [
   {
     label: 'Nhà máy/ Factory',
-    value: 'factory',
+    value: 'Nhà máy/ Factory',
   },
   {
-    label: 'Văn phòng HCM',
-    value: 'HCM Office',
+    label: 'Văn phòng HCM/ HCM Office',
+    value: 'Văn phòng HCM/ HCM Office',
   },
   {
-    label: 'Văn phòng HN',
-    value: 'HN Office',
+    label: 'Văn phòng HN/ HN Office​',
+    value: 'Văn phòng HN/ HN Office​',
   },
 ];
 
-const brandOptions: DefaultOptionType[] = [
-  { label: 'STAR Đau họng (xanh lá)', value: 'STAR Đau họng (xanh lá)' },
-  { label: 'Giảm ho STAR (cam)', value: 'Giảm ho STAR (cam)' },
-  { label: 'Dizzo Hiệu quả. (Sủi)', value: 'Dizzo Hiệu quả. (Sủi)' },
-  { label: 'canxilife', value: 'canxilife' },
-  { label: 'Ameflu DT+C', value: 'Ameflu DT+C' },
-  { label: 'Gói Tydol', value: 'Gói Tydol' },
-  { label: 'Xi-rô cây thường xuân STAR', value: 'Xi-rô cây thường xuân STAR' },
-  { label: 'Nhai chóng mặt', value: 'Nhai chóng mặt' },
-  { label: 'Dizzo Lacto', value: 'Dizzo Lacto' },
-  { label: 'Centovit', value: 'Centovit' },
-  { label: 'Tydol Nữ', value: 'Tydol Nữ' },
-  { label: 'amip', value: 'amip' },
+const images = [
+  {
+    id: 1,
+    src: Star_Green,
+  },
+  {
+    id: 2,
+    src: Star_Brown,
+  },
+  {
+    id: 3,
+    src: Star_Dark_Blue,
+  },
+  {
+    id: 4,
+    src: Dizzo,
+  },
+  {
+    id: 5,
+    src: Calci_Life,
+  },
+  {
+    id: 6,
+    src: Centovit,
+  },
+  {
+    id: 7,
+    src: Tydol_Women,
+  },
+  {
+    id: 8,
+    src: Ameflu_Orange,
+  },
+  {
+    id: 9,
+    src: Ameflu_Green,
+  },
+  {
+    id: 10,
+    src: Ame_Bismo,
+  },
 ];
 
 const { TextArea } = Input,
@@ -64,9 +108,32 @@ const { TextArea } = Input,
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const [form] = useForm();
+  const [form] = useForm<IRetailVisit>();
 
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
+  const { data } = useSelector((state: RootState) => state.stimulusProduct);
+
+  const [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
+
+  useEffect(() => {
+    const fieldsValue = {
+      retailerAddress: 'Nhà máy/ Factory',
+    };
+
+    form.setFieldsValue(fieldsValue);
+    dispatch(getStimulusProducts());
+  }, []);
+
+  console.log(data);
+
+  useEffect(() => {
+    const options: DefaultOptionType[] = data.map((item) => ({
+      label: item.name,
+      value: item.name,
+    }));
+
+    setProductOptions(options);
+  }, [data]);
 
   const handleBeforeUpload = useCallback(() => {
     return false;
@@ -96,7 +163,7 @@ const Home = () => {
       {
         name: 'officeLocation',
         label: 'Địa chỉ văn phòng / Nơi làm việc',
-        component: <Select options={addressOptions} />,
+        component: <Select allowClear={false} options={addressOptions} />,
       },
       {
         required: true,
@@ -134,7 +201,7 @@ const Home = () => {
         component: (
           <Checkbox.Group className="w-full">
             <Row gutter={[8, 16]}>
-              {brandOptions.map((brand, index) => (
+              {productOptions.map((brand, index) => (
                 <Col key={index} span={12}>
                   <Checkbox value={brand.value}>{brand.label}</Checkbox>
                 </Col>
@@ -204,8 +271,8 @@ const Home = () => {
           </Row>
           <FormComp
             form={form}
-            className="p-2.5 border-2 border-[#94CBFF] mt-5"
             onFinish={handleSubmit}
+            className="mt-5 p-2.5 border-2 border-[#94CBFF] rounded-md"
           >
             {inputs.map((input, index) => {
               const { name, label, required, message, component } = input;
@@ -226,11 +293,28 @@ const Home = () => {
         </Col>
         <Col className="max-w-[463px]">
           <div className="w-full flex gap-5 flex-col">
-            <Image preview={false} width={386} height={308} src={Freepik_Br} />
-            <Image preview={false} width={386} height={308} src={Star_Benko} />
+            {images.map((image) => (
+              <Image
+                key={image.id}
+                width={386}
+                height={308}
+                preview={false}
+                src={image.src}
+                className="object-contain"
+              />
+            ))}
           </div>
         </Col>
       </Row>
+      <Row gutter={[8, 20]}>
+        <Row className="w-full max-w-[1140px] mx-auto">
+          <Image preview={false} src={Rewards} />
+        </Row>
+        <Row className="w-full max-w-[1140px] mx-auto pb-2.5">
+          <Image preview={false} src={VN_Brand_Banner_3} />
+        </Row>
+      </Row>
+      <BackToTop />
     </>
   );
 };
