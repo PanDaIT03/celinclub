@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { RetailVisitApis } from 'apis/retailVisit';
+import { toast } from 'config/toast';
 
 const initialState: IInitialState = {
   loading: false,
@@ -9,7 +10,12 @@ const initialState: IInitialState = {
 export const uploadRetailVisit = createAsyncThunk(
   'uploadRetailVisit',
   async (data: IRetailVisit) => {
-    RetailVisitApis.uploadRetailVisit(data);
+    const result = await RetailVisitApis.uploadRetailVisit(data);
+
+    if (result?.id) {
+      toast.success('Cập nhật kết quả viếng thăm thành công!');
+      return;
+    }
   },
 );
 
