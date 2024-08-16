@@ -13,12 +13,26 @@ import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { ReactNode, useMemo } from 'react';
 
-import { Freepik_Br, Star_Benko } from 'assets/images';
+import Dragger from 'antd/es/upload/Dragger';
+import {
+  Ame_Bismo,
+  Ameflu_Green,
+  Ameflu_Orange,
+  Calci_Life,
+  Centovit,
+  Dizzo,
+  Rewards,
+  Star_Brown,
+  Star_Dark_Blue,
+  Star_Green,
+  Tydol_Women,
+  VN_Brand_Banner_3,
+} from 'assets/images';
+import FormComp from 'components/Form/Form';
 import Select from 'components/Select/Select';
 import Banner from 'layouts/Banner';
-import Dragger from 'antd/es/upload/Dragger';
 import { icons } from 'utils/constants/icons';
-import FormComp from 'components/Form/Form';
+import BackToTop from 'components/BackToTop/BackToTop';
 
 type InputFormProps = {
   label: string;
@@ -38,6 +52,49 @@ const addressOptions: DefaultOptionType[] = [
   {
     label: 'Văn phòng HN',
     value: 'HN Office',
+  },
+];
+
+const images = [
+  {
+    id: 1,
+    src: Star_Green,
+  },
+  {
+    id: 2,
+    src: Star_Brown,
+  },
+  {
+    id: 3,
+    src: Star_Dark_Blue,
+  },
+  {
+    id: 4,
+    src: Dizzo,
+  },
+  {
+    id: 5,
+    src: Calci_Life,
+  },
+  {
+    id: 6,
+    src: Centovit,
+  },
+  {
+    id: 7,
+    src: Tydol_Women,
+  },
+  {
+    id: 8,
+    src: Ameflu_Orange,
+  },
+  {
+    id: 9,
+    src: Ameflu_Green,
+  },
+  {
+    id: 10,
+    src: Ame_Bismo,
   },
 ];
 
@@ -217,11 +274,28 @@ const Home = () => {
         </Col>
         <Col className="max-w-[463px]">
           <div className="w-full flex gap-5 flex-col">
-            <Image preview={false} width={386} height={308} src={Freepik_Br} />
-            <Image preview={false} width={386} height={308} src={Star_Benko} />
+            {images.map((image) => (
+              <Image
+                key={image.id}
+                width={386}
+                height={308}
+                preview={false}
+                src={image.src}
+                className="object-contain"
+              />
+            ))}
           </div>
         </Col>
       </Row>
+      <Row gutter={[8, 20]}>
+        <Row className="w-full max-w-[1140px] mx-auto">
+          <Image preview={false} src={Rewards} />
+        </Row>
+        <Row className="w-full max-w-[1140px] mx-auto pb-2.5">
+          <Image preview={false} src={VN_Brand_Banner_3} />
+        </Row>
+      </Row>
+      <BackToTop />
     </>
   );
 };

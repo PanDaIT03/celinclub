@@ -1,5 +1,5 @@
 import { Col, Row, Image } from 'antd';
-import { Rewards, RV_POV_Logo, VN_Brand_Banner_3 } from 'assets/images';
+import { Rewards, RV_OPV_Logo, VN_Brand_Banner_3 } from 'assets/images';
 
 const Banner = () => {
   return (
@@ -13,7 +13,7 @@ const Banner = () => {
             </h2>
           </Col>
           <Col className="p-2.5">
-            <Image preview={false} width={184} height={122} src={RV_POV_Logo} />
+            <Image preview={false} width={184} height={122} src={RV_OPV_Logo} />
           </Col>
         </div>
       </Row>
