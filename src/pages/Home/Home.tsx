@@ -6,7 +6,7 @@ import {
   Image,
   Input,
   InputProps,
-  Row
+  Row,
 } from 'antd';
 import { Rule } from 'antd/es/form';
 import { useForm } from 'antd/es/form/Form';
