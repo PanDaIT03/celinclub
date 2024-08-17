@@ -1,4 +1,3 @@
-import { Rule } from 'antd/es/form';
 import {
   Checkbox,
   Col,
@@ -8,14 +7,15 @@ import {
   Input,
   InputProps,
   Row,
-  Tooltip,
 } from 'antd';
+import { Rule } from 'antd/es/form';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { UploadChangeParam, UploadFile } from 'antd/es/upload';
 import Dragger from 'antd/es/upload/Dragger';
 import dayjs from 'dayjs';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import {
   Ame_Bismo,
@@ -35,12 +35,11 @@ import BackToTop from 'components/BackToTop/BackToTop';
 import FormComp from 'components/Form/Form';
 import Select from 'components/Select/Select';
 import Banner from 'layouts/Banner';
-import { useSelector } from 'react-redux';
 import { uploadRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
-import { icons } from 'utils/constants/icons';
 import { inputNumberPatern } from 'utils/constants/constants';
+import { icons } from 'utils/constants/icons';
 
 type InputFormProps = {
   label: string;
@@ -59,8 +58,8 @@ const addressOptions: DefaultOptionType[] = [
     value: 'Văn phòng HCM/ HCM Office',
   },
   {
-    label: 'Văn phòng HN/ HN Office​',
-    value: 'Văn phòng HN/ HN Office​',
+    label: 'Văn phòng HN/ HN Office',
+    value: 'Văn phòng HN/ HN Office',
   },
 ];
 
