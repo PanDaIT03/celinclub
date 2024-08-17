@@ -229,10 +229,17 @@ const Home = () => {
         component: <TextArea rows={4} />,
       },
       {
-        required: true,
         name: 'upload',
-        message: 'Hãy tải ảnh của bạn',
         label: 'Upload Retailer Photo / Tải ảnh NT, hóa đơn, SP đã mua',
+        customeRules: [
+          {
+            validator: (_, value, __) => {
+              if (value?.fileList.length <= 2) return Promise.resolve();
+              return Promise.reject();
+            },
+            message: 'Hãy tải lên tối đa 2 ảnh',
+          },
+        ],
         component: (
           <Dragger
             name={'file'}
