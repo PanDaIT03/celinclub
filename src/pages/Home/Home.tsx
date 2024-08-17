@@ -15,6 +15,7 @@ import { UploadChangeParam, UploadFile } from 'antd/es/upload';
 import Dragger from 'antd/es/upload/Dragger';
 import dayjs from 'dayjs';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import {
@@ -40,6 +41,7 @@ import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { inputNumberPatern } from 'utils/constants/constants';
 import { icons } from 'utils/constants/icons';
+import '../../i18n/index';
 
 type InputFormProps = {
   label: string;
@@ -47,21 +49,6 @@ type InputFormProps = {
   component?: ReactNode;
   customeRules?: Rule[];
 } & InputProps;
-
-const addressOptions: DefaultOptionType[] = [
-  {
-    label: 'Nhà máy/ Factory',
-    value: 'Nhà máy/ Factory',
-  },
-  {
-    label: 'Văn phòng HCM/ HCM Office',
-    value: 'Văn phòng HCM/ HCM Office',
-  },
-  {
-    label: 'Văn phòng HN/ HN Office​',
-    value: 'Văn phòng HN/ HN Office​',
-  },
-];
 
 const images = [
   {
@@ -110,22 +97,39 @@ const { TextArea } = Input,
   { CloudUploadOutlined } = icons;
 
 const Home = () => {
+  const { t } = useTranslation(['form', 'home']);
+
   const dispatch = useAppDispatch();
   const [form] = useForm<IRetailVisit>();
   const { data } = useSelector((state: RootState) => state.stimulusProduct);
 
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
 
+  const [addressOptions, setAddressOptions] = useState<DefaultOptionType[]>([]);
   const [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
 
   useEffect(() => {
-    const fieldsValue = {
-      officeLocation: 'Nhà máy/ Factory',
-    };
-
-    form.setFieldsValue(fieldsValue);
     dispatch(getStimulusProducts());
   }, []);
+
+  useEffect(() => {
+    setAddressOptions([
+      {
+        label: t('Factory'),
+        value: t('Factory'),
+      },
+      {
+        label: t('HCM Office'),
+        value: t('HCM Office'),
+      },
+      {
+        label: t('HN Office'),
+        value: t('HN Office'),
+      },
+    ]);
+
+    form.setFieldValue('officeLocation', t('Factory'));
+  }, [t]);
 
   useEffect(() => {
     const options: DefaultOptionType[] = data.map((item) => ({
@@ -152,14 +156,14 @@ const Home = () => {
       {
         required: true,
         name: 'fullName',
+        label: t('Employee Full Name'),
         message: 'Nhập họ và tên nhân viên',
-        label: 'Full Name / Họ và tên nhân viên',
       },
       {
         required: true,
         name: 'phoneNumber',
+        label: t('Employee Mobile Number'),
         message: 'Nhập số điện thoại nhân viên',
-        label: 'Số điện thoại di động của nhân viên',
         customeRules: [
           {
             pattern: inputNumberPatern,
@@ -169,20 +173,20 @@ const Home = () => {
       },
       {
         name: 'officeLocation',
-        label: 'Địa chỉ văn phòng / Nơi làm việc',
+        label: t('Office Location'),
         component: <Select allowClear={false} options={addressOptions} />,
       },
       {
         required: true,
         name: 'retailerName',
-        label: 'Tên nhà bán lẻ',
+        label: t('Retailer Name'),
         message: 'Nhập tên nhà bán lẻ',
       },
       {
         required: true,
         name: 'retailerPhoneNumber',
-        label: 'Số liên hệ nhà bán lẻ / Số ĐT của nhà bán lẻ',
-        message: 'Nhập Số liên hệ / Số ĐT của nhà bán lẻ',
+        label: t('Retailer Contact Number'),
+        message: 'Nhập số liên hệ / SĐT của nhà bán lẻ',
         customeRules: [
           {
             pattern: inputNumberPatern,
@@ -192,12 +196,12 @@ const Home = () => {
       },
       {
         name: 'retailerAddress',
-        label: 'Khu vực / Quận / Địa chỉ nhà bán lẻ',
+        label: t('Retail Area'),
       },
       {
         required: true,
-        label: 'Ngày thăm',
         name: 'visitDate',
+        label: t('Visit Date'),
         message: 'Chọn ngày thăm',
         component: (
           <DatePicker
@@ -210,7 +214,7 @@ const Home = () => {
       },
       {
         name: 'stimulusProductIds',
-        label: 'Thương hiệu có sẵn / Sản phẩm kích cầu',
+        label: t('Cellulite Products'),
         component: (
           <Checkbox.Group className="w-full">
             <Row gutter={[8, 16]}>
@@ -225,12 +229,12 @@ const Home = () => {
       },
       {
         name: 'feedback',
-        label: 'Nhận xét / Phản hồi / Tóm tắt nội dung',
+        label: t('Feedback'),
         component: <TextArea rows={4} />,
       },
       {
         name: 'upload',
-        label: 'Upload Retailer Photo / Tải ảnh NT, hóa đơn, SP đã mua',
+        label: t('Upload Retailer Photo'),
         customeRules: [
           {
             validator: (_, value, __) => {
@@ -252,17 +256,13 @@ const Home = () => {
             <p className="ant-upload-drag-icon">
               <CloudUploadOutlined />
             </p>
-            <p className="ant-upload-text">
-              Thả tập tin của bạn ở đây hoặc bấm vào đây để tải lên
-            </p>
-            <p className="ant-upload-hint">
-              Bạn có thể tải lên tối đa 2 tập tin.
-            </p>
+            <p className="ant-upload-text">{t('Drop File')}</p>
+            <p className="ant-upload-hint">{t('Max Files Upload')}</p>
           </Dragger>
         ),
       },
     ];
-  }, [fileList, form, productOptions]);
+  }, [t, fileList, form, productOptions, addressOptions]);
 
   const handleSubmit = (values: IRetailVisit) => {
     dispatch(
@@ -287,11 +287,11 @@ const Home = () => {
           <Row>
             <h2 className="w-full text-center">
               <span className="font-rubik font-semibold text-[#1F1F1F] text-[22px]">
-                Tải lên chi tiết chuyến thăm bán lẻ của bạn tại đây...
+                {t('Upload Retail Visit Details')}
               </span>
               <br />
               <span className="font-roboto font-semibold text-sub text-[22px]">
-                Cập nhật kết quả thăm quan tại đây...
+                {t('Update Visit Results')}
               </span>
             </h2>
           </Row>
