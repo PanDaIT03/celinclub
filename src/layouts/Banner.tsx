@@ -1,7 +1,11 @@
 import { Col, Row, Image } from 'antd';
 import { Rewards, RV_OPV_Logo, VN_Brand_Banner_3 } from 'assets/images';
+import { useTranslation } from 'react-i18next';
+import '../i18n/index';
 
 const Banner = () => {
+  const { t } = useTranslation(['home', 'form']);
+
   return (
     <>
       <Row className="bg-[#FFFED2]">
@@ -23,11 +27,12 @@ const Banner = () => {
       <Row className="w-full max-w-[1140px] mx-auto py-2.5">
         <h2 className="w-full text-center">
           <span className="font-doppio font-semibold text-[#033A72] text-[33px]">
-            Thực hiện 5 cuộc gọi mỗi tuần và nhận phần thưởng đảm bảo!
+            {t('Submit')}
+            {t('Weekly Call Reward')}
           </span>
           <br />
           <span className="font-roboto font-semibold text-[#0BA2E2] text-[28px]">
-            Thực hiện viếng thăm 5 nhà mỗi tuần để nhận ngay quà tặng
+            {t('Weekly House Visit Reward')}
           </span>
         </h2>
       </Row>

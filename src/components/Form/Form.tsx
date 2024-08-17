@@ -3,6 +3,9 @@ import { FormInstance } from 'antd/es/form';
 import { InternalNamePath } from 'antd/es/form/interface';
 import classNames from 'classnames';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import '../../i18n/index';
 
 interface IProps {
   children: ReactNode;
@@ -29,6 +32,8 @@ const FormComp = ({
   isSubmitting = false,
   onFinish,
 }: IProps) => {
+  const { t } = useTranslation(['form', 'home']);
+
   const customeClass = classNames(
     'p-2.5 border-2 border-[#94CBFF] mt-5',
     className,
@@ -54,7 +59,7 @@ const FormComp = ({
         {children}
         <Row>
           <Button htmlType="submit" disabled={isSubmitting}>
-            Gửi
+            {t('Submit')}
           </Button>
         </Row>
       </div>
