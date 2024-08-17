@@ -233,10 +233,17 @@ const Home = () => {
         component: <TextArea rows={4} />,
       },
       {
-        required: true,
         name: 'upload',
-        message: 'Hãy tải ảnh của bạn',
         label: t('Upload Retailer Photo'),
+        customeRules: [
+          {
+            validator: (_, value, __) => {
+              if (value?.fileList.length <= 2) return Promise.resolve();
+              return Promise.reject();
+            },
+            message: 'Hãy tải lên tối đa 2 ảnh',
+          },
+        ],
         component: (
           <Dragger
             name={'file'}
@@ -261,7 +268,9 @@ const Home = () => {
     dispatch(
       uploadRetailVisit({
         ...values,
-        visitDate: dayjs(values.visitDate).format('DD/MM/YYYY'),
+        visitDate: dayjs(values.visitDate).isValid()
+          ? dayjs(values.visitDate).format('DD/MM/YYYY')
+          : dayjs(new Date()).format('DD/MM/YYYY'),
         onSuccess: () => {
           setFileList([]);
           form.resetFields();

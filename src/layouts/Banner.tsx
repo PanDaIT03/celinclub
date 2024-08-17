@@ -27,7 +27,6 @@ const Banner = () => {
       <Row className="w-full max-w-[1140px] mx-auto py-2.5">
         <h2 className="w-full text-center">
           <span className="font-doppio font-semibold text-[#033A72] text-[33px]">
-            {t('Submit')}
             {t('Weekly Call Reward')}
           </span>
           <br />
