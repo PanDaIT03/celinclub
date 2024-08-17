@@ -97,7 +97,8 @@ const { TextArea } = Input,
   { CloudUploadOutlined } = icons;
 
 const Home = () => {
-  const { t } = useTranslation(['form', 'home']);
+  const { t, i18n } = useTranslation('form');
+  const { t: t_home } = useTranslation('home');
 
   const dispatch = useAppDispatch();
   const [form] = useForm<IRetailVisit>();
@@ -109,6 +110,7 @@ const Home = () => {
   const [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
 
   useEffect(() => {
+    i18n.reloadResources();
     dispatch(getStimulusProducts());
   }, []);
 
@@ -116,15 +118,15 @@ const Home = () => {
     setAddressOptions([
       {
         label: t('Factory'),
-        value: t('Factory'),
+        value: 'Nhà máy/ Factory',
       },
       {
         label: t('HCM Office'),
-        value: t('HCM Office'),
+        value: 'Văn phòng HCM/ HCM Office',
       },
       {
         label: t('HN Office'),
-        value: t('HN Office'),
+        value: 'Văn phòng HN/ HN Office',
       },
     ]);
 
@@ -287,11 +289,11 @@ const Home = () => {
           <Row>
             <h2 className="w-full text-center">
               <span className="font-rubik font-semibold text-[#1F1F1F] text-[22px]">
-                {t('Upload Retail Visit Details')}
+                {t_home('Upload Retail Visit Details')}
               </span>
               <br />
               <span className="font-roboto font-semibold text-sub text-[22px]">
-                {t('Update Visit Results')}
+                {t_home('Update Visit Results')}
               </span>
             </h2>
           </Row>

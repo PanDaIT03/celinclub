@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import '../i18n/index';
 
 const Banner = () => {
-  const { t } = useTranslation(['home', 'form']);
+  const { t } = useTranslation('home');
 
   return (
     <>
@@ -13,7 +13,7 @@ const Banner = () => {
           <Col className="flex flex-1 p-2.5 justify-center items-center">
             <h2 className="font-roboto text-3xl text-[#016088] font-semibold text-center">
               Chương trình <br />
-              khách hàng Kích thước / Mystery Shopper
+              khách hàng Kích cầu / Mystery Shopper
             </h2>
           </Col>
           <Col className="p-2.5">
