@@ -34,12 +34,12 @@ const retailVist = createSlice({
     builder.addCase(uploadRetailVisit.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(uploadRetailVisit.fulfilled, (state, action) => {
+    builder.addCase(uploadRetailVisit.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(uploadRetailVisit.rejected, (state, action) => {
       state.loading = true;
-      console.log(action.error);
+      action.error.message && toast.error(action.error.message);
     });
   },
 });
