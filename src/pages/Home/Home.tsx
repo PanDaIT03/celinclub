@@ -268,7 +268,9 @@ const Home = () => {
     dispatch(
       uploadRetailVisit({
         ...values,
-        visitDate: dayjs(values.visitDate).format('DD/MM/YYYY'),
+        visitDate: dayjs(values.visitDate).isValid()
+          ? dayjs(values.visitDate).format('DD/MM/YYYY')
+          : dayjs(new Date()).format('DD/MM/YYYY'),
         onSuccess: () => {
           setFileList([]);
           form.resetFields();
