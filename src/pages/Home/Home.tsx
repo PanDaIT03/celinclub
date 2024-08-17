@@ -112,6 +112,7 @@ const Home = () => {
   useEffect(() => {
     i18n.reloadResources();
     dispatch(getStimulusProducts());
+    form.setFieldValue('officeLocation', 'Nhà máy/ Factory');
   }, []);
 
   useEffect(() => {
@@ -129,8 +130,6 @@ const Home = () => {
         value: 'Văn phòng HN/ HN Office',
       },
     ]);
-
-    form.setFieldValue('officeLocation', t('Factory'));
   }, [t]);
 
   useEffect(() => {
