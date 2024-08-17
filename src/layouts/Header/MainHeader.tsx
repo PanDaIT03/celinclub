@@ -1,5 +1,6 @@
 import { Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { HeaderLogo } from 'assets/images';
@@ -9,6 +10,13 @@ import '../../i18n/index';
 
 const MainHeader = () => {
   const { i18n } = useTranslation();
+  const currentLanguage = i18n.language;
+
+  const [isViLanguage, setIsViLanguage] = useState(true);
+
+  useEffect(() => {
+    setIsViLanguage(currentLanguage === 'vi');
+  }, [currentLanguage]);
 
   const handleChangeLanguage = (lng: 'en' | 'vi') => {
     i18n.changeLanguage(lng);
@@ -30,14 +38,18 @@ const MainHeader = () => {
             onClick={() => handleChangeLanguage('en')}
           >
             <Icon svgIcon={<EN_Flag />} />
-            <span>EN</span>
+            <span className={!isViLanguage ? 'font-bold text-[#1b43ef]' : ''}>
+              EN
+            </span>
           </div>
           <div
             className="leading-6 flex gap-[5px] justify-center items-center cursor-pointer"
             onClick={() => handleChangeLanguage('vi')}
           >
             <Icon svgIcon={<VI_Flag />} />
-            <span>VI</span>
+            <span className={isViLanguage ? 'font-bold text-[#1b43ef]' : ''}>
+              VI
+            </span>
           </div>
         </Col>
       </Row>
