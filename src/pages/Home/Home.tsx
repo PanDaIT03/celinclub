@@ -103,11 +103,13 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const [form] = useForm<IRetailVisit>();
 
-  const [fileList, setFileList] = useState<UploadFile<any>[]>([]);
-  const { data } = useSelector((state: RootState) => state.stimulusProduct);
+  const { data: stimulusProducts } = useSelector(
+    (state: RootState) => state.stimulusProduct,
+  );
 
-  const [addressOptions, setAddressOptions] = useState<DefaultOptionType[]>([]);
-  const [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
+  const [fileList, setFileList] = useState<UploadFile<any>[]>([]),
+    [addressOptions, setAddressOptions] = useState<DefaultOptionType[]>([]),
+    [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
 
   useEffect(() => {
     i18n.reloadResources();
@@ -133,13 +135,13 @@ const Home = () => {
   }, [t]);
 
   useEffect(() => {
-    const options: DefaultOptionType[] = data.map((item) => ({
+    const options: DefaultOptionType[] = stimulusProducts.map((item) => ({
       label: item.name,
       value: item.id,
     }));
 
     setProductOptions(options);
-  }, [data]);
+  }, [stimulusProducts]);
 
   const handleBeforeUpload = useCallback(() => {
     return false;
