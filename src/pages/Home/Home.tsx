@@ -34,7 +34,7 @@ import {
 } from 'assets/images';
 import BackToTop from 'components/BackToTop/BackToTop';
 import FormComp from 'components/Form/Form';
-import Select from 'components/Select/Select';
+import SelectForm from 'components/Select/SelectForm';
 import Banner from 'layouts/Banner';
 import { uploadRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
@@ -187,7 +187,7 @@ const Home = () => {
       {
         name: 'officeLocation',
         label: t('Office Location'),
-        component: <Select allowClear={false} options={addressOptions} />,
+        component: <SelectForm allowClear={false} options={addressOptions} />,
       },
       {
         required: true,
