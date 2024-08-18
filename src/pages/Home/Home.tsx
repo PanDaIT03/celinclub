@@ -275,6 +275,7 @@ const Home = () => {
         onSuccess: () => {
           setFileList([]);
           form.resetFields();
+          form.setFieldValue('officeLocation', 'Nhà máy/ Factory');
         },
       }),
     );
