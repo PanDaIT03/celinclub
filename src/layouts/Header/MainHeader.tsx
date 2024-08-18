@@ -19,14 +19,15 @@ import path from '../../routes/path';
 const MainHeader = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const headerRef = useRef<any>(null);
 
-  const { user } = useSelector((state: RootState) => state.user);
+  const headerRef = useRef<any>(null);
 
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
   const { t } = useTranslation('header');
+
+  const { user } = useSelector((state: RootState) => state.user);
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isViLanguage, setIsViLanguage] = useState(true);
@@ -120,20 +121,17 @@ const MainHeader = () => {
         <Col>
           <Button
             type="text"
+            icon={
+              typeof user === 'undefined' ? (
+                <LoginOutlined />
+              ) : (
+                <LoginOutlined />
+              )
+            }
             className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
             onClick={handleClickLogin}
           >
-            {typeof user === 'undefined' ? (
-              <>
-                <LoginOutlined />
-                {t('Sign in')}
-              </>
-            ) : (
-              <>
-                <LoginOutlined />
-                Đăng xuất
-              </>
-            )}
+            {typeof user === 'undefined' ? t('Sign in') : t('Sign out')}
           </Button>
         </Col>
       </Row>
