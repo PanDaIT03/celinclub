@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { LoginOutlined } from '@ant-design/icons';
 import { HeaderLogo } from 'assets/images';
 import { EN_Flag, VI_Flag } from 'assets/svg';
 import Icon from 'components/Icon/Icon';
 import '../../i18n/index';
 import path from '../../routes/path';
-import { LoginOutlined } from '@ant-design/icons';
 
 const MainHeader = () => {
   const navigate = useNavigate();
