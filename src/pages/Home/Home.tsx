@@ -141,6 +141,16 @@ const Home = () => {
     setProductOptions(options);
   }, [data]);
 
+  useEffect(() => {
+    const errors = form.getFieldsError();
+
+    errors.forEach(({ name, errors }) => {
+      if (errors.length > 0) {
+        form.validateFields([name]);
+      }
+    });
+  }, [i18n.language, form]);
+
   const handleBeforeUpload = useCallback(() => {
     return false;
   }, []);
@@ -158,17 +168,17 @@ const Home = () => {
         required: true,
         name: 'fullName',
         label: t('Employee Full Name'),
-        message: 'Nhập họ và tên nhân viên',
+        message: t('errors.Employee Full Name'),
       },
       {
         required: true,
         name: 'phoneNumber',
         label: t('Employee Mobile Number'),
-        message: 'Nhập số điện thoại nhân viên',
+        message: t('errors.Employee Mobile Number'),
         customeRules: [
           {
             pattern: inputNumberPatern,
-            message: 'Số điện thoại không hợp lệ. Hãy nhập 10 chữ số',
+            message: t('errors.Input Number Patern'),
           },
         ],
       },
@@ -181,17 +191,17 @@ const Home = () => {
         required: true,
         name: 'retailerName',
         label: t('Retailer Name'),
-        message: 'Nhập tên nhà bán lẻ',
+        message: t('errors.Retailer Name'),
       },
       {
         required: true,
         name: 'retailerPhoneNumber',
         label: t('Retailer Contact Number'),
-        message: 'Nhập số liên hệ / SĐT của nhà bán lẻ',
+        message: t('errors.Retailer Contact Number'),
         customeRules: [
           {
             pattern: inputNumberPatern,
-            message: 'Số điện thoại không hợp lệ. Hãy nhập 10 chữ số',
+            message: t('errors.Input Number Patern'),
           },
         ],
       },
@@ -203,7 +213,7 @@ const Home = () => {
         required: true,
         name: 'visitDate',
         label: t('Visit Date'),
-        message: 'Chọn ngày thăm',
+        message: t('errors.Visit Date'),
         component: (
           <DatePicker
             picker="date"
@@ -238,11 +248,11 @@ const Home = () => {
         label: t('Upload Retailer Photo'),
         customeRules: [
           {
-            validator: (_, value, __) => {
+            validator: (_, value) => {
               if (value?.fileList.length <= 2) return Promise.resolve();
               return Promise.reject();
             },
-            message: 'Hãy tải lên tối đa 2 ảnh',
+            message: t('errors.Upload Retailer Photo'),
           },
         ],
         component: (
