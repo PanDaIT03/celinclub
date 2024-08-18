@@ -1,13 +1,28 @@
 import { UploadFile } from 'antd';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
 import { toast } from 'config/toast';
 
 export const RetailVisitApis = {
-  findAll: async () => {
-    console.log('finding ...');
+  findAll: async (): Promise<IRetailVisit[]> => {
+    try {
+      const q = query(collection(firestoreDatabase, 'retailVisit'));
+      const querySnapshot = await getDocs(q);
+
+      return querySnapshot.docs.map((doc) => {
+        const data = doc.data() as IRetailVisit;
+
+        return {
+          id: doc.id,
+          ...data,
+        };
+      });
+    } catch (error: any) {
+      toast.error(error);
+      return [];
+    }
   },
   uploadRetailVisit: async (data: IRetailVisit) => {
     try {
