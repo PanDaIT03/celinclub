@@ -5,9 +5,11 @@ import { ColumnType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { FilterIcon, FilterWhiteIcon } from 'assets/svg';
 import SelectForm from 'components/Select/SelectForm';
+import useQueryParam from 'hooks/useQueryParam';
 import { findAllRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
@@ -16,7 +18,8 @@ import '../../i18n/index';
 
 const spanCol = 8;
 
-const Admin = () => {
+const ManagementRetailVisit = () => {
+  const navigate = useNavigate();
   const [form] = useForm();
   const dispatch = useAppDispatch();
 
@@ -36,22 +39,12 @@ const Admin = () => {
     (state: RootState) => state.stimulusProduct,
   );
 
-  // const queryParam = useQueryParam(),
-  //   page = parseInt(queryParam.get('page') + '') || 1,
-  //   pageSize = parseInt(queryParam.get('page_size') + '') || 10;
+  const queryParam = useQueryParam(),
+    page = parseInt(queryParam.get('page') + '') || 1,
+    pageSize = parseInt(queryParam.get('page_size') + '') || 10;
 
   useEffect(() => {
     i18n.reloadResources();
-
-    // dispatch(
-    //   findAllRetailVisit({
-    //     // pagination: {
-    //     //   pageSize: pageSize,
-    //     //   startAfter: items[items.length - 1],
-    //     // },
-    //     // officeLocation: 'Văn phòng HCM/ HCM Office',
-    //   }),
-    // );
     onFilter();
     dispatch(getStimulusProducts());
   }, []);
@@ -64,6 +57,8 @@ const Admin = () => {
 
     setProductOptions(options);
   }, [products]);
+
+  console.log(retailVisits);
 
   useEffect(() => {
     setAddressOptions([
@@ -147,9 +142,12 @@ const Admin = () => {
 
   const onFilterCancel = () => {
     form.resetFields();
+    onFilter();
   };
 
   const onFilter = (values?: any) => {
+    navigate(`?page=1&page_size=${pageSize}`);
+
     dispatch(
       findAllRetailVisit({
         officeLocation: values?.location,
@@ -223,15 +221,16 @@ const Admin = () => {
           scroll={{ x: 2100 }}
           className="w-full p-4"
           rowKey={(record) => record.id}
+          rowClassName={(_, index) => (index % 2 !== 0 ? 'even-row' : '')}
           title={() => (
             <p className="text-[14px] leading-[22.4px] font-bold">
               {t_admin('Visit List')}
             </p>
           )}
           pagination={{
-            // current: 1,
-            pageSize: 10,
-            total: retailVisits.pageInfo?.totalItems,
+            size: 'default',
+            current: page,
+            total: retailVisits.items.length || 1,
             pageSizeOptions: ['1', '2', '10'],
             showSizeChanger: true,
             onChange: HocChangePagination(),
@@ -242,4 +241,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default ManagementRetailVisit;

@@ -14,6 +14,12 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
 import { toast } from 'config/toast';
+import {
+  IRetailVisit,
+  IRetailVisitData,
+  TRetailVisit,
+} from 'types/retailVisit';
+import { convertTimestampToString } from 'utils/constants/constants';
 import { StimulusProductApis } from './stimulusProduct';
 
 export interface IFilterFindAll {
@@ -28,27 +34,6 @@ export interface IFilterFindAll {
 
 export const RetailVisitApis = {
   findAll: async (params: IFilterFindAll): Promise<IRetailVisitData> => {
-    // const date = new Date(params.visitDate);
-    // const timestamp = Timestamp.fromDate(date);
-
-    console.log({
-      orderBy: orderBy('visitDate', 'desc'),
-      ...(params.officeLocation && {
-        officeLocationWhere: where(
-          'officeLocation',
-          '==',
-          params.officeLocation,
-        ),
-      }),
-      ...(params.stimulusProduct && {
-        stimulusProductWhere: where(
-          'stimulusProductIds',
-          'array-contains',
-          params.stimulusProduct,
-        ),
-      }),
-    });
-
     const conditions = Object.values({
       orderBy: orderBy('visitDate', 'desc'),
       // ...(params.pagination &&
@@ -102,18 +87,16 @@ export const RetailVisitApis = {
 
       const items = querySnapshot.docs.map((doc) => {
         const data = doc.data() as TRetailVisit;
-        const visitDate = dayjs(
-          (data.visitDate as unknown as Timestamp).toDate(),
-        ).isValid()
-          ? dayjs((data.visitDate as unknown as Timestamp).toDate()).format(
-              'DD/MM/YYYY',
-            )
-          : undefined;
+        const dataFormatted =
+          typeof data.visitDate !== 'string' &&
+          typeof data.visitDate !== 'undefined'
+            ? convertTimestampToString(data.visitDate)
+            : undefined;
 
         return {
           id: doc.id,
           ...data,
-          visitDate: visitDate,
+          visitDate: dataFormatted,
           stimulusProducts: stimulusProducts
             .filter((product) =>
               doc
