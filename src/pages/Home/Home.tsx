@@ -293,7 +293,7 @@ const Home = () => {
   return (
     <>
       <Banner />
-      <Row className="flex p-2.5 gap-5">
+      <Row className="flex bg-white p-2.5 gap-5">
         <Col className="flex-1 max-w-[897px] !p-2.5">
           <Row>
             <h2 className="w-full text-center">
@@ -346,7 +346,7 @@ const Home = () => {
           </div>
         </Col>
       </Row>
-      <Row gutter={[8, 20]}>
+      <Row gutter={[8, 20]} className="bg-white">
         <Row className="w-full max-w-[1140px] mx-auto">
           <Image preview={false} src={Rewards} />
         </Row>

@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Home from 'pages/Home/Home';
 import ProtectedRoute from 'pages/Root';
 import path from './path';
+import Admin from 'pages/Admin/Admin';
 
 const Router = () => {
   const routes = [
@@ -11,8 +12,12 @@ const Router = () => {
       element: <ProtectedRoute />,
       children: [
         {
-          path: ``,
+          path: '',
           element: <Home />,
+        },
+        {
+          path: `${path.ADMIN}`,
+          element: <Admin />,
         },
       ],
     },
