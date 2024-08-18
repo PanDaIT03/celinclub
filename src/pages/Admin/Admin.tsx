@@ -2,7 +2,6 @@ import { Button, Col, Form, Row, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnType } from 'antd/es/table';
-import useQueryParam from 'hooks/useQueryParam';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -34,28 +33,25 @@ const Admin = () => {
     (state: RootState) => state.stimulusProduct,
   );
 
-  const queryParam = useQueryParam(),
-    page = parseInt(queryParam.get('page') + '') || 1,
-    pageSize = parseInt(queryParam.get('page_size') + '') || 10;
+  // const queryParam = useQueryParam(),
+  //   page = parseInt(queryParam.get('page') + '') || 1,
+  //   pageSize = parseInt(queryParam.get('page_size') + '') || 10;
 
   useEffect(() => {
-    const { items } = retailVisits;
-
     i18n.reloadResources();
 
-    dispatch(
-      findAllRetailVisit({
-        // pagination: {
-        //   pageSize: pageSize,
-        //   startAfter: items[items.length - 1],
-        // },
-        // officeLocation: 'Văn phòng HCM/ HCM Office',
-        visitDate: '29/08/2024',
-      }),
-    );
+    // dispatch(
+    //   findAllRetailVisit({
+    //     // pagination: {
+    //     //   pageSize: pageSize,
+    //     //   startAfter: items[items.length - 1],
+    //     // },
+    //     // officeLocation: 'Văn phòng HCM/ HCM Office',
+    //   }),
+    // );
+    onFilter();
     dispatch(getStimulusProducts());
   }, []);
-  // }, [page, pageSize]);
 
   useEffect(() => {
     const options: DefaultOptionType[] = products.map((product) => ({
@@ -146,13 +142,17 @@ const Admin = () => {
     },
   ];
 
-  const handleClickCancel = () => {
-    console.log('cancel');
+  const onFilterCancel = () => {
     form.resetFields();
   };
 
-  const handleClickFilter = (values: any) => {
-    console.log('filter', values);
+  const onFilter = (values?: any) => {
+    dispatch(
+      findAllRetailVisit({
+        officeLocation: values?.location,
+        stimulusProduct: values?.product,
+      }),
+    );
   };
 
   return (
@@ -162,7 +162,7 @@ const Admin = () => {
         size="small"
         layout="vertical"
         autoComplete="off"
-        onFinish={handleClickFilter}
+        onFinish={onFilter}
         className="w-full bg-white rounded-lg shadow-md p-4 mb-5"
       >
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
@@ -186,7 +186,7 @@ const Admin = () => {
         <Row className="flex gap-3 justify-end">
           <Col>
             <Button
-              onClick={handleClickCancel}
+              onClick={onFilterCancel}
               className="min-w-[72px] px-3 py-5 font-medium rounded-md"
             >
               {t_admin('Cancel')}
