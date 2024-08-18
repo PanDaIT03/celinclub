@@ -68,8 +68,8 @@ const Admin = () => {
   const columns: ColumnType[] = [
     {
       width: 50,
-      title: 'STT',
       dataIndex: 'stt',
+      title: t_admin('Number'),
       render: (_: any, __: any, index: number) => index + 1,
     },
     {
@@ -169,17 +169,17 @@ const Admin = () => {
           <Col>
             <Button
               onClick={handleClickCancel}
-              className="px-3 py-5 font-medium rounded-md"
+              className="min-w-[72px] px-3 py-5 font-medium rounded-md"
             >
-              Hủy
+              {t_admin('Cancel')}
             </Button>
           </Col>
           <Col>
             <Button
               htmlType="submit"
-              className="px-3 py-5 font-medium rounded-md bg-[#16548f] text-white hover:!bg-[#16548f] hover:!text-white"
+              className="min-w-[87px] px-3 py-5 font-medium rounded-md bg-[#16548f] text-white hover:!bg-[#16548f] hover:!text-white"
             >
-              Tìm kiếm
+              {t_admin('Search')}
             </Button>
           </Col>
         </Row>
