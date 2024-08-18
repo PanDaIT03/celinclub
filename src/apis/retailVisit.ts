@@ -1,15 +1,33 @@
 import { UploadFile } from 'antd';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, getDocs, query } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
 import { toast } from 'config/toast';
 
 export const RetailVisitApis = {
+  findAll: async (): Promise<IRetailVisit[]> => {
+    try {
+      const q = query(collection(firestoreDatabase, 'retailVisit'));
+      const querySnapshot = await getDocs(q);
+
+      return querySnapshot.docs.map((doc) => {
+        const data = doc.data() as IRetailVisit;
+
+        return {
+          id: doc.id,
+          ...data,
+        };
+      });
+    } catch (error: any) {
+      toast.error(error);
+      return [];
+    }
+  },
   uploadRetailVisit: async (data: IRetailVisit) => {
     try {
       const { upload, ...others } = data;
-      const urls: string[] = [];
+      let error: string | undefined = undefined;
 
       for (const key in others) {
         const currentKey = key as keyof Omit<IRetailVisit, 'upload'>;
@@ -34,16 +52,22 @@ export const RetailVisitApis = {
                 file.originFileObj,
               );
 
-              urls.push(await getDownloadURL(uploadResult.ref));
-            } catch (error) {
-              toast.error(`Đã xảy ra lỗi trong quá trình upload ảnh: ${error}`);
+              return await getDownloadURL(uploadResult.ref);
+            } catch (errorMessage: any) {
+              error = errorMessage;
+              return undefined;
             }
           }),
         );
 
-      await uploadPhotos(upload.fileList);
+      const urls = await uploadPhotos(upload.fileList);
 
       try {
+        if (urls.filter((url) => url === undefined).length > 0) {
+          toast.error(`Đã xảy ra lỗi trong quá trình upload ảnh: ${error}`);
+          return;
+        }
+
         const entity = await addDoc(
           collection(firestoreDatabase, 'retailVisit'),
           { ...others, imageUrls: urls },

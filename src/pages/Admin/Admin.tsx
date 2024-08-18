@@ -1,9 +1,23 @@
 import { Row, Table } from 'antd';
 import { ColumnType } from 'antd/es/table';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { findAllRetailVisit } from 'state/reducers/retailVisit';
+import { RootState, useAppDispatch } from 'state/store';
+
 const Admin = () => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation('form');
+
+  const { data: retailVisits } = useSelector(
+    (state: RootState) => state.retailVisit,
+  );
+
+  useEffect(() => {
+    dispatch(findAllRetailVisit());
+  }, []);
 
   const columns: ColumnType[] = [
     {
@@ -67,6 +81,8 @@ const Admin = () => {
       render: (value) => value || '-',
     },
   ];
+
+  console.log(retailVisits);
 
   return (
     <div className="p-5 mt-3">
