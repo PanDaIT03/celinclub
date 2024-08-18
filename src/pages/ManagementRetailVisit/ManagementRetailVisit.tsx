@@ -230,7 +230,7 @@ const ManagementRetailVisit = () => {
           pagination={{
             size: 'default',
             current: page,
-            total: retailVisits.items.length || 1,
+            total: retailVisits.items?.length ?? 0,
             pageSizeOptions: ['1', '2', '10'],
             showSizeChanger: true,
             onChange: HocChangePagination(),
