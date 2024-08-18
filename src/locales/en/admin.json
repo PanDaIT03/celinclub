@@ -1,0 +1,18 @@
+{
+  "Office Location": "Office Location",
+  "Cellulite Products": "Cellulite Products",
+  "Visit Date": "Visit Date",
+  "Retailer Name": "Retailer Name",
+  "Employee Full Name": "Employee's Full Name",
+  "Feedback": "Feedback",
+  "Retail Area": "Retailers' address",
+  "Upload Retailer Photo": "Photos",
+  "Employee Mobile Number": "Employee's phone number",
+  "Retailer Contact Number": "Retailer Contact Number",
+  "Cancel": "Cancel",
+  "Search": "Search",
+  "placeHolder": {
+    "Office Location": "Select your workplace",
+    "Cellulite Products": "Select product"
+  }
+}

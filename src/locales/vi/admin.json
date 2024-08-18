@@ -1,0 +1,18 @@
+{
+  "Office Location": "Nơi làm việc",
+  "Cellulite Products": "Sản phẩm kích cầu",
+  "Visit Date": "Ngày thăm",
+  "Retailer Name": "Tên nhà bán lẻ",
+  "Employee Full Name": "Họ và tên nhân viên",
+  "Feedback": "Nhận xét",
+  "Retail Area": "Địa chỉ của nhà bán lẻ",
+  "Upload Retailer Photo": "Ảnh NT / Hóa đơn / SP đã mua",
+  "Employee Mobile Number": "SDT của nhân viên",
+  "Retailer Contact Number": "Số liên hệ / SĐT của nhà bán lẻ",
+  "Cancel": "Huỷ",
+  "Search": "Tìm kiếm",
+  "placeHolder": {
+    "Office Location": "Chọn nơi làm việc",
+    "Cellulite Products": "Chọn sản phẩm"
+  }
+}
