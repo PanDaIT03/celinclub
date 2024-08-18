@@ -6,10 +6,13 @@ import { firestoreDatabase } from 'config/firebase';
 import { toast } from 'config/toast';
 
 export const RetailVisitApis = {
+  findAll: async () => {
+    console.log('finding ...');
+  },
   uploadRetailVisit: async (data: IRetailVisit) => {
     try {
       const { upload, ...others } = data;
-      const urls: string[] = [];
+      let error: string | undefined = undefined;
 
       for (const key in others) {
         const currentKey = key as keyof Omit<IRetailVisit, 'upload'>;
@@ -34,16 +37,22 @@ export const RetailVisitApis = {
                 file.originFileObj,
               );
 
-              urls.push(await getDownloadURL(uploadResult.ref));
-            } catch (error) {
-              toast.error(`Đã xảy ra lỗi trong quá trình upload ảnh: ${error}`);
+              return await getDownloadURL(uploadResult.ref);
+            } catch (errorMessage: any) {
+              error = errorMessage;
+              return undefined;
             }
           }),
         );
 
-      await uploadPhotos(upload.fileList);
+      const urls = await uploadPhotos(upload.fileList);
 
       try {
+        if (urls.filter((url) => url === undefined).length > 0) {
+          toast.error(`Đã xảy ra lỗi trong quá trình upload ảnh: ${error}`);
+          return;
+        }
+
         const entity = await addDoc(
           collection(firestoreDatabase, 'retailVisit'),
           { ...others, imageUrls: urls },
