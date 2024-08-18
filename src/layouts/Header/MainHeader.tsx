@@ -1,5 +1,4 @@
-import { LoginOutlined } from '@ant-design/icons';
-import { Button, Col, Image, Row } from 'antd';
+import { Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -117,7 +116,7 @@ const MainHeader = () => {
             </span>
           </div>
         </Col>
-        <Col>
+        {/* <Col>
           <Button
             type="text"
             className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
@@ -135,7 +134,7 @@ const MainHeader = () => {
               </>
             )}
           </Button>
-        </Col>
+        </Col> */}
       </Row>
     </Header>
   );

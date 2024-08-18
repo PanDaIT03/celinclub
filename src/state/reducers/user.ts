@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
 import { auth } from 'config/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+
+import { UserApis } from 'apis/user';
 
 type TUserInitialState = {
   user?: IUser;
@@ -20,12 +21,19 @@ export const signInWithGooglePopup = createAsyncThunk(
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      console.log('User signed in:', user);
+      const userDoc = await UserApis.findById(user.uid);
 
-      // Optional: Bạn có thể lưu thông tin người dùng vào Firestore nếu cần
-    //   const userRef = doc(db, "users", user.uid);
-      // await setDoc(userRef, { email: user.email, name: user.displayName });
-      return user as IUser;
+      if (!userDoc.exists()) {
+        await UserApis.save({
+          displayName: user?.displayName ?? '',
+          email: user?.email ?? '',
+          id: user?.uid ?? '',
+          photoURL: user?.photoURL ?? '',
+          role: 'user',
+        });
+      }
+
+      return userDoc as IUser;
     } catch (error: any) {
       console.error('Error signing in with Google:', error?.message ?? error);
       return undefined;

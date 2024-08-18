@@ -285,6 +285,18 @@ const Home = () => {
   }, [t, fileList, form, productOptions, addressOptions]);
 
   const handleSubmit = (values: any) => {
+    console.log({
+      ...values,
+      visitDate: Timestamp.fromDate(
+        new Date(dayjs(values.visitDate).format('DD/MM/YYYY')),
+      ),
+      onSuccess: () => {
+        setFileList([]);
+        form.resetFields();
+        form.setFieldValue('officeLocation', 'Nhà máy/ Factory');
+      },
+    });
+
     dispatch(
       uploadRetailVisit({
         ...values,

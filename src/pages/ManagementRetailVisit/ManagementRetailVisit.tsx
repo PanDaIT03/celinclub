@@ -169,7 +169,7 @@ const ManagementRetailVisit = () => {
       stimulusProduct: values?.product?.trim(),
       ...values,
     };
-    
+
     dispatch(findAllRetailVisit({ ...formatedValues }));
   };
 
