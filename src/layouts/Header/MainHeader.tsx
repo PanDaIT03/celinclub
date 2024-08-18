@@ -8,13 +8,13 @@ import { useNavigate } from 'react-router-dom';
 import { HeaderLogo } from 'assets/images';
 import { EN_Flag, VI_Flag } from 'assets/svg';
 import Icon from 'components/Icon/Icon';
+import { auth } from 'config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import { useSelector } from 'react-redux';
 import { signInWithGooglePopup, signOut } from 'state/reducers/user';
 import { RootState, useAppDispatch } from 'state/store';
 import '../../i18n/index';
 import path from '../../routes/path';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from 'config/firebase';
 
 const MainHeader = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +25,8 @@ const MainHeader = () => {
 
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
+
+  const { t } = useTranslation('header');
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isViLanguage, setIsViLanguage] = useState(true);
@@ -118,13 +120,13 @@ const MainHeader = () => {
         <Col>
           <Button
             type="text"
-            className="text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
+            className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
             onClick={handleClickLogin}
           >
             {typeof user === 'undefined' ? (
               <>
                 <LoginOutlined />
-                Đăng nhập
+                {t('Sign in')}
               </>
             ) : (
               <>

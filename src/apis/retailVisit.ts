@@ -29,6 +29,8 @@ export interface IFilterFindAll {
     startAfter: IRetailVisit;
     pageSize: number;
   };
+  phoneNumber?: string;
+  employeeName?: string;
   officeLocation?: string;
   stimulusProduct?: string;
   visitDate?: string;

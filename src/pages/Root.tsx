@@ -17,7 +17,6 @@ const Root = () => {
   useEffect(() => {
     if (retailVisitLoading || userLoading) {
       const scrollPosition = window.scrollY;
-
       const preventScroll = () => {
         window.scrollTo(0, scrollPosition);
       };
@@ -35,9 +34,9 @@ const Root = () => {
       spinning={retailVisitLoading || userLoading}
       tip="Loading..."
       style={{
-        position: 'fixed',
         top: '50%',
         left: '50%',
+        position: 'fixed',
         transform: 'translate(-50%, -50%)',
         zIndex: 1000,
       }}
