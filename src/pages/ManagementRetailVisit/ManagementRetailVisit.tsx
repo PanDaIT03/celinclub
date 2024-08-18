@@ -15,7 +15,6 @@ import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { HocChangePagination } from 'utils/PaginationChange';
 import '../../i18n/index';
-import { inputNumberPatern } from 'utils/constants/constants';
 
 const spanCol = 8;
 
