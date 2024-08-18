@@ -44,7 +44,7 @@ const MainHeader = () => {
   return (
     <Header
       ref={headerRef}
-      style={{ height: isScrolled ? '60px' : '148px' }}
+      style={{ height: isScrolled ? '60px' : '100px' }}
       className={`sticky top-0 z-50 transition-all duration-300 bg-white shadow-md`}
     >
       <Row justify="space-between" className="h-full px-2.5">
