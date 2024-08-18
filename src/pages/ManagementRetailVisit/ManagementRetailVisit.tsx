@@ -1,4 +1,4 @@
-import { Button, Col, Form, Image, Row, Table } from 'antd';
+import { Button, Col, Form, Image, Input, Row, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnType } from 'antd/es/table';
@@ -15,6 +15,7 @@ import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { HocChangePagination } from 'utils/PaginationChange';
 import '../../i18n/index';
+import { inputNumberPatern } from 'utils/constants/constants';
 
 const spanCol = 8;
 
@@ -185,7 +186,17 @@ const ManagementRetailVisit = () => {
         onFinish={onFilter}
         className={`w-full bg-white rounded-lg shadow-md p-4 ${isOpenFilter ? 'block' : 'hidden'}`}
       >
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Row gutter={{ xs: 8, sm: 24, md: 24, lg: 32 }}>
+          <Col span={spanCol} className="h-[80px]">
+            <Form.Item label={'SDT nhân viên'} name="phoneNumber">
+              <Input name="phoneNumber" className="h-[40px] rounded-md" />
+            </Form.Item>
+          </Col>
+          <Col span={spanCol} className="h-[80px]">
+            <Form.Item label={'Tên nhân viên'} name="employeeName">
+              <Input name="employeeName" className="h-[40px] rounded-md" />
+            </Form.Item>
+          </Col>
           <Col span={spanCol} className="h-[80px]">
             <Form.Item label={t_admin('Office Location')} name="location">
               <SelectForm

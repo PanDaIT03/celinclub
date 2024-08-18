@@ -1,7 +1,6 @@
 import { Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { DefaultOptionType } from 'antd/es/select';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,13 +10,10 @@ import Icon from 'components/Icon/Icon';
 import '../../i18n/index';
 import path from '../../routes/path';
 
-const languageOptions: DefaultOptionType[] = [
-  { label: 'English', value: 'en' },
-  { label: 'Tiếng Việt', value: 'vi' },
-];
-
 const MainHeader = () => {
   const navigate = useNavigate();
+  const headerRef = useRef<any>(null);
+
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
@@ -31,14 +27,15 @@ const MainHeader = () => {
   useEffect(() => {
     const handleScroll = () => {
       setTimeout(() => {
-        const isScrolleY = window.scrollY <= 50;
-        setIsScrolled(!isScrolleY);
+        const isScrolledY =
+          window.scrollY - headerRef.current.clientHeight <= 50;
+        setIsScrolled(!isScrolledY);
       }, 500);
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [headerRef]);
 
   const handleChangeLanguage = (value: string) => {
     i18n.changeLanguage(value);
@@ -46,7 +43,8 @@ const MainHeader = () => {
 
   return (
     <Header
-      style={{ height: isScrolled ? '60px' : '148px' }}
+      ref={headerRef}
+      style={{ height: isScrolled ? '60px' : '100px' }}
       className={`sticky top-0 z-50 transition-all duration-300 bg-white shadow-md`}
     >
       <Row justify="space-between" className="h-full px-2.5">
@@ -59,13 +57,6 @@ const MainHeader = () => {
             onClick={() => navigate(path.ROOT)}
           />
         </Col>
-        {/* <Select
-          allowClear={false}
-          showSearch={false}
-          options={languageOptions}
-          className="w-40 fixed top-[15px] right-[15px] z-50"
-          onChange={handleChangeLanguage}
-        /> */}
         <Col className="fixed flex items-start gap-2 top-[15px] right-[15px] z-50">
           <div
             className="leading-6 flex gap-[5px] justify-center items-center cursor-pointer"
