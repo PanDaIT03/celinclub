@@ -1,14 +1,44 @@
 import { UploadFile } from 'antd';
-import { addDoc, collection, getDocs, query } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getDocs,
+  limit,
+  query,
+  startAfter,
+} from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
 import { toast } from 'config/toast';
 
+export interface IFilterFindAll {
+  pagination?: {
+    startAfter: IRetailVisit;
+    pageSize: number;
+  };
+  officeLocation?: string;
+  stimulusProduct?: string;
+}
+
 export const RetailVisitApis = {
-  findAll: async (): Promise<IRetailVisit[]> => {
+  findAll: async (params: IFilterFindAll): Promise<IRetailVisit[]> => {
+    const conditions = Object.values({
+      ...(params.pagination &&
+        params.pagination.startAfter && {
+          startAfter: startAfter(params.pagination.startAfter),
+        }),
+      ...(params.pagination &&
+        params.pagination.pageSize && {
+          limit: limit(params.pagination.pageSize),
+        }),
+    });
+
     try {
-      const q = query(collection(firestoreDatabase, 'retailVisit'));
+      const q = query(
+        collection(firestoreDatabase, 'retailVisit'),
+        ...conditions,
+      );
       const querySnapshot = await getDocs(q);
 
       return querySnapshot.docs.map((doc) => {
