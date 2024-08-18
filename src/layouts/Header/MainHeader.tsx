@@ -118,7 +118,7 @@ const MainHeader = () => {
             </span>
           </div>
         </Col>
-        <Col>
+        {/* <Col>
           <Button
             type="text"
             icon={
@@ -133,7 +133,7 @@ const MainHeader = () => {
           >
             {typeof user === 'undefined' ? t('Sign in') : t('Sign out')}
           </Button>
-        </Col>
+        </Col> */}
       </Row>
     </Header>
   );

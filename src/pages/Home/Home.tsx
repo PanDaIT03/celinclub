@@ -289,7 +289,9 @@ const Home = () => {
       uploadRetailVisit({
         ...values,
         visitDate: Timestamp.fromDate(
-          new Date(dayjs(values.visitDate).format('DD/MM/YYYY')),
+          values.visitDate
+            ? dayjs(values.visitDate, 'DD/MM/YYYY').toDate()
+            : new Date(),
         ),
         onSuccess: () => {
           setFileList([]);
