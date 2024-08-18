@@ -82,8 +82,6 @@ const Admin = () => {
     },
   ];
 
-  console.log(retailVisits);
-
   return (
     <div className="p-5 mt-3">
       <Row className="bg-white rounded-lg shadow-md">

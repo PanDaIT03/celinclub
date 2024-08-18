@@ -12,24 +12,40 @@ const MainHeader = () => {
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isViLanguage, setIsViLanguage] = useState(true);
 
   useEffect(() => {
     setIsViLanguage(currentLanguage === 'vi');
   }, [currentLanguage]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setTimeout(() => {
+        const isScrolleY = window.scrollY <= 50;
+        setIsScrolled(!isScrolleY);
+      }, 500);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleChangeLanguage = (lng: 'en' | 'vi') => {
     i18n.changeLanguage(lng);
   };
 
   return (
-    <Header className="h-full bg-white px-2.5 border-2 border-[#97C8FF]">
+    <Header
+      className={`h-full sticky top-0 z-50 transition-all duration-300 bg-white shadow-md`}
+    >
       <Row justify="space-between" className="px-2.5">
         <Col className="w-full max-w-[1140px] h-max p-2.5 mx-auto leading-none">
           <Image
             preview={false}
             src={HeaderLogo}
-            className="max-w-[500px] max-h-[157px] object-contain"
+            height={isScrolled ? 60 : '100%'}
+            className="max-h-[157px] max-w-[500px] object-contain"
           />
         </Col>
         <Col className="fixed flex items-start gap-2 top-[15px] right-[15px] z-50">
