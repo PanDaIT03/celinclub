@@ -1,4 +1,4 @@
-import { Button, Col, Form, Row, Table } from 'antd';
+import { Button, Col, Form, Image, Row, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnType } from 'antd/es/table';
@@ -134,9 +134,17 @@ const ManagementRetailVisit = () => {
     },
     {
       width: 300,
-      dataIndex: 'upload',
+      dataIndex: 'imageUrls',
       title: t_admin('Upload Retailer Photo'),
-      render: (value) => value || '-',
+      render: (value) => {
+        return (
+          <div className="flex gap-2">
+            {value?.map((item: string, index: number) => (
+              <Image key={index} className="max-w-[100px]" src={item} />
+            ))}
+          </div>
+        );
+      },
     },
   ];
 
