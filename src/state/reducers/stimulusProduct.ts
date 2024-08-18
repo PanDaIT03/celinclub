@@ -12,7 +12,7 @@ const initialState: IStimulusProductInitialSate = {
 };
 
 export const getStimulusProducts = createAsyncThunk(
-  'getStimulusProducts',
+  'stimulusProduct/getStimulusProducts',
   async () => {
     return StimulusProductApis.getAll();
   },

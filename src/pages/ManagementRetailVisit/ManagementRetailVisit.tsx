@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Table } from 'antd';
+import { Button, Col, Form, Image, Input, Row, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnType } from 'antd/es/table';
@@ -11,6 +11,7 @@ import { IFilterFindAll } from 'apis/retailVisit';
 import { FilterIcon, FilterWhiteIcon } from 'assets/svg';
 import SelectForm from 'components/Select/SelectForm';
 import useQueryParam from 'hooks/useQueryParam';
+import { findAllRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { HocChangePagination } from 'utils/PaginationChange';
@@ -139,9 +140,17 @@ const ManagementRetailVisit = () => {
     },
     {
       width: 300,
-      dataIndex: 'upload',
+      dataIndex: 'imageUrls',
       title: t_admin('Upload Retailer Photo'),
-      render: (value) => value || '-',
+      render: (value) => {
+        return (
+          <div className="flex gap-2">
+            {value?.map((item: string, index: number) => (
+              <Image key={index} className="max-w-[100px]" src={item} />
+            ))}
+          </div>
+        );
+      },
     },
   ];
 
@@ -158,9 +167,10 @@ const ManagementRetailVisit = () => {
       phoneNumber: values?.phoneNumber?.trim(),
       officeLocation: values?.location?.trim(),
       stimulusProduct: values?.product?.trim(),
+      ...values,
     };
-    console.log(formatedValues);
-    // dispatch(findAllRetailVisit({ ...formatedValues }));
+    
+    dispatch(findAllRetailVisit({ ...formatedValues }));
   };
 
   return (
@@ -267,7 +277,7 @@ const ManagementRetailVisit = () => {
           pagination={{
             size: 'default',
             current: page,
-            total: retailVisits.items?.length ?? 0,
+            total: retailVisits.items?.length ?? 1,
             pageSizeOptions: ['1', '2', '10'],
             showSizeChanger: true,
             onChange: HocChangePagination(),
