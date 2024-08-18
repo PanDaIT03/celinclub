@@ -1,15 +1,11 @@
 import { UploadFile } from 'antd';
-import dayjs from 'dayjs';
 import {
   addDoc,
   collection,
-  endAt,
   getCountFromServer,
   getDocs,
   orderBy,
   query,
-  startAt,
-  Timestamp,
   where,
 } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
@@ -34,8 +30,6 @@ export interface IFilterFindAll {
   officeLocation?: string;
   stimulusProduct?: string;
   visitDate?: string;
-  phoneNumber?: string;
-  employeeName?: string;
 }
 
 export const RetailVisitApis = {

@@ -146,7 +146,11 @@ const ManagementRetailVisit = () => {
         return (
           <div className="flex gap-2">
             {value?.map((item: string, index: number) => (
-              <Image key={index} className="max-w-[100px]" src={item} />
+              <Image
+                key={index}
+                src={item}
+                className="max-w-[100px] !bg-transparent"
+              />
             ))}
           </div>
         );
@@ -169,7 +173,7 @@ const ManagementRetailVisit = () => {
       stimulusProduct: values?.product?.trim(),
       ...values,
     };
-    
+
     dispatch(findAllRetailVisit({ ...formatedValues }));
   };
 
