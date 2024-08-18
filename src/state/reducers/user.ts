@@ -23,7 +23,7 @@ export const signInWithGooglePopup = createAsyncThunk(
       console.log('User signed in:', user);
 
       // Optional: Bạn có thể lưu thông tin người dùng vào Firestore nếu cần
-    //   const userRef = doc(db, "users", user.uid);
+      //   const userRef = doc(db, "users", user.uid);
       // await setDoc(userRef, { email: user.email, name: user.displayName });
       return user as IUser;
     } catch (error: any) {
