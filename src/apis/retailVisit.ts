@@ -115,9 +115,9 @@ export const RetailVisitApis = {
           visitDate: dataFormatted,
           stimulusProducts: stimulusProducts
             .filter((product) =>
-              doc
-                .data()
-                .stimulusProductIds.some((id: string) => id === product.id),
+              (doc.data()?.stimulusProductIds ?? []).some(
+                (id: string) => id === product.id,
+              ),
             )
             .map((item) => item.name)
             .join(', '),
