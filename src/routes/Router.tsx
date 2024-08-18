@@ -1,5 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
+import Admin from 'pages/Admin/Admin';
 import Home from 'pages/Home/Home';
 import ProtectedRoute from 'pages/Root';
 import path from './path';
@@ -13,6 +14,16 @@ const Router = () => {
         {
           path: ``,
           element: <Home />,
+        },
+      ],
+    },
+    {
+      path: `${path.ADMIN}`,
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: ``,
+          element: <Admin />,
         },
       ],
     },

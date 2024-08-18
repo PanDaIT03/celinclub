@@ -1,5 +1,6 @@
 const path = {
   ROOT: '/',
+  ADMIN: '/admin',
   // HOME: '/home',
 };
 

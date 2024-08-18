@@ -1,9 +1,9 @@
 import { Layout, Spin } from 'antd';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
 import MainHeader from 'layouts/Header/MainHeader';
-import { useSelector } from 'react-redux';
 import { RootState } from 'state/store';
 
 const Root = () => {
