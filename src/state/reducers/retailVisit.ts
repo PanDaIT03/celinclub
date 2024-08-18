@@ -2,6 +2,11 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import { IFilterFindAll, RetailVisitApis } from 'apis/retailVisit';
 import { toast } from 'config/toast';
+import {
+  IPageInfo,
+  IRetailInitialState,
+  IUploadRetailVisit,
+} from 'types/retailVisit';
 
 const initialState: IRetailInitialState = {
   data: {
