@@ -21,23 +21,25 @@ const Banner = () => {
           </Col>
         </div>
       </Row>
-      <Row className="w-full max-w-[1140px] mx-auto py-2.5">
-        <Image preview={false} src={VN_Brand_Banner_3} />
-      </Row>
-      <Row className="w-full max-w-[1140px] mx-auto py-2.5">
-        <h2 className="w-full text-center">
-          <span className="font-doppio font-semibold text-[#033A72] text-[33px]">
-            {t('Weekly Call Reward')}
-          </span>
-          <br />
-          <span className="font-roboto font-semibold text-[#0BA2E2] text-[28px]">
-            {t('Weekly House Visit Reward')}
-          </span>
-        </h2>
-      </Row>
-      <Row className="w-full max-w-[1140px] mx-auto py-2.5">
-        <Image preview={false} src={Rewards} />
-      </Row>
+      <div className="bg-white">
+        <Row className="w-full max-w-[1140px] mx-auto py-2.5">
+          <Image preview={false} src={VN_Brand_Banner_3} />
+        </Row>
+        <Row className="w-full max-w-[1140px] mx-auto py-2.5">
+          <h2 className="w-full text-center">
+            <span className="font-doppio font-semibold text-[#033A72] text-[33px]">
+              {t('Weekly Call Reward')}
+            </span>
+            <br />
+            <span className="font-roboto font-semibold text-[#0BA2E2] text-[28px]">
+              {t('Weekly House Visit Reward')}
+            </span>
+          </h2>
+        </Row>
+        <Row className="w-full max-w-[1140px] mx-auto py-2.5">
+          <Image preview={false} src={Rewards} />
+        </Row>
+      </div>
     </>
   );
 };

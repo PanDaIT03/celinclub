@@ -14,5 +14,14 @@
   "Max Files Upload": "Bạn có thể tải lên tối đa 2 tập tin.",
   "Retailer Contact Number": "Số liên hệ / SĐT của nhà bán lẻ",
   "Cellulite Products": "Thương hiệu có sẵn / Sản phẩm kích cầu",
-  "Drop File": "Thả tập tin của bạn ở đây hoặc bấm vào đây để tải lên"
+  "Drop File": "Thả tập tin của bạn ở đây hoặc bấm vào đây để tải lên",
+  "errors": {
+    "Employee Full Name": "Hãy nhập họ và tên nhân viên",
+    "Employee Mobile Number": "Hãy nhập số điện thoại nhân viên",
+    "Retailer Name": "Hãy nhập tên nhà bán lẻ",
+    "Retailer Contact Number": "Hãy nhập số liên hệ / SĐT của nhà bán lẻ",
+    "Input Number Patern": "Số điện thoại không hợp lệ. Hãy nhập 10 chữ số",
+    "Visit Date": "Hãy chọn ngày thăm",
+    "Upload Retailer Photo": "Hãy tải lên tối đa 2 ảnh"
+  }
 }
