@@ -11,6 +11,7 @@ import SelectForm from 'components/Select/SelectForm';
 import { findAllRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
+import { HocChangePagination } from 'utils/PaginationChange';
 import '../../i18n/index';
 
 const spanCol = 8;
@@ -35,10 +36,23 @@ const Admin = () => {
     (state: RootState) => state.stimulusProduct,
   );
 
+  // const queryParam = useQueryParam(),
+  //   page = parseInt(queryParam.get('page') + '') || 1,
+  //   pageSize = parseInt(queryParam.get('page_size') + '') || 10;
+
   useEffect(() => {
     i18n.reloadResources();
 
-    dispatch(findAllRetailVisit({}));
+    // dispatch(
+    //   findAllRetailVisit({
+    //     // pagination: {
+    //     //   pageSize: pageSize,
+    //     //   startAfter: items[items.length - 1],
+    //     // },
+    //     // officeLocation: 'Văn phòng HCM/ HCM Office',
+    //   }),
+    // );
+    onFilter();
     dispatch(getStimulusProducts());
   }, []);
 
@@ -88,7 +102,7 @@ const Admin = () => {
       render: (value) => value || '-',
     },
     {
-      width: 100,
+      width: 150,
       dataIndex: 'officeLocation',
       title: t_admin('Office Location'),
       render: (value) => value || '-',
@@ -100,7 +114,7 @@ const Admin = () => {
       render: (value) => value || '-',
     },
     {
-      width: 220,
+      width: 250,
       dataIndex: 'retailerPhoneNumber',
       title: t_admin('Retailer Contact Number'),
       render: (value) => value || '-',
@@ -113,7 +127,7 @@ const Admin = () => {
     },
     {
       width: 250,
-      dataIndex: 'stimulusProductIds',
+      dataIndex: ['stimulusProducts'],
       title: t_admin('Cellulite Products'),
       render: (value) => value || '-',
     },
@@ -124,20 +138,24 @@ const Admin = () => {
       render: (value) => value || '-',
     },
     {
-      width: 190,
+      width: 300,
       dataIndex: 'upload',
       title: t_admin('Upload Retailer Photo'),
       render: (value) => value || '-',
     },
   ];
 
-  const handleClickCancel = () => {
-    console.log('cancel');
+  const onFilterCancel = () => {
     form.resetFields();
   };
 
-  const handleClickFilter = (values: any) => {
-    console.log('filter', values);
+  const onFilter = (values?: any) => {
+    dispatch(
+      findAllRetailVisit({
+        officeLocation: values?.location,
+        stimulusProduct: values?.product,
+      }),
+    );
   };
 
   return (
@@ -157,7 +175,7 @@ const Admin = () => {
         size="small"
         layout="vertical"
         autoComplete="off"
-        onFinish={handleClickFilter}
+        onFinish={onFilter}
         className={`w-full bg-white rounded-lg shadow-md p-4 ${isOpenFilter ? 'block' : 'hidden'}`}
       >
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
@@ -181,7 +199,7 @@ const Admin = () => {
         <Row className="flex gap-3 justify-end">
           <Col>
             <Button
-              onClick={handleClickCancel}
+              onClick={onFilterCancel}
               className="min-w-[72px] px-3 py-5 font-medium rounded-md"
             >
               {t_admin('Cancel')}
@@ -201,7 +219,8 @@ const Admin = () => {
         <Table
           size="middle"
           columns={columns}
-          scroll={{ x: 2000 }}
+          dataSource={retailVisits.items}
+          scroll={{ x: 2100 }}
           className="w-full p-4"
           rowKey={(record) => record.id}
           title={() => (
@@ -209,6 +228,14 @@ const Admin = () => {
               {t_admin('Visit List')}
             </p>
           )}
+          pagination={{
+            // current: 1,
+            pageSize: 10,
+            total: retailVisits.pageInfo?.totalItems,
+            pageSizeOptions: ['1', '2', '10'],
+            showSizeChanger: true,
+            onChange: HocChangePagination(),
+          }}
         />
       </Row>
     </Row>
