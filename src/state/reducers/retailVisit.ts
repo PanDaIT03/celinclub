@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import { RetailVisitApis } from 'apis/retailVisit';
+import { IFilterFindAll, RetailVisitApis } from 'apis/retailVisit';
 import { toast } from 'config/toast';
 
 type IRetailInitialState = {
@@ -33,8 +33,8 @@ export const uploadRetailVisit = createAsyncThunk(
 
 export const findAllRetailVisit = createAsyncThunk(
   'findAllRetailVisit',
-  async () => {
-    return await RetailVisitApis.findAll();
+  async (params: IFilterFindAll) => {
+    return await RetailVisitApis.findAll(params);
   },
 );
 

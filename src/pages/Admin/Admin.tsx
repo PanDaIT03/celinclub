@@ -35,7 +35,7 @@ const Admin = () => {
   useEffect(() => {
     i18n.reloadResources();
 
-    dispatch(findAllRetailVisit());
+    dispatch(findAllRetailVisit({}));
     dispatch(getStimulusProducts());
   }, []);
 
