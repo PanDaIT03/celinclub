@@ -89,12 +89,12 @@ const MainHeader = () => {
         justify="space-between"
         className="h-full px-2.5"
       >
-        <Col className="w-full h-full max-w-[800px] p-2.5 mx-auto leading-none">
+        <Col className="w-full h-full max-w-[300px] p-2.5 mx-auto leading-none">
           <Image
             preview={false}
             src={HeaderLogo}
             height={'100%'}
-            className="max-h-[148px] max-w-[500px] object-contain cursor-pointer"
+            className="max-h-[148px] max-w-[300px] object-contain cursor-pointer"
             onClick={() => navigate(path.ROOT)}
           />
         </Col>
