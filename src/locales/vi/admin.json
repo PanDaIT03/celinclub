@@ -14,6 +14,8 @@
   "Cancel": "Huỷ",
   "Search": "Tìm kiếm",
   "placeHolder": {
+    "Phone Number": "Nhập SDT nhân viên",
+    "Employee Name": "Nhập tên nhân viên",
     "Office Location": "Chọn nơi làm việc",
     "Cellulite Products": "Chọn sản phẩm"
   }

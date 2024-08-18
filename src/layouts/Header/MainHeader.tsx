@@ -18,6 +18,8 @@ const MainHeader = () => {
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
+  const { t } = useTranslation('header');
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isViLanguage, setIsViLanguage] = useState(true);
 
@@ -90,11 +92,11 @@ const MainHeader = () => {
         <Col>
           <Button
             type="text"
-            className="text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
+            className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
             onClick={handleClickLogin}
           >
             <LoginOutlined />
-            Đăng nhập
+            {t('Sign in')}
           </Button>
         </Col>
       </Row>
