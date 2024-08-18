@@ -1,4 +1,4 @@
-import { Col, Image, Row } from 'antd';
+import { Button, Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import { EN_Flag, VI_Flag } from 'assets/svg';
 import Icon from 'components/Icon/Icon';
 import '../../i18n/index';
 import path from '../../routes/path';
+import { LoginOutlined } from '@ant-design/icons';
 
 const MainHeader = () => {
   const navigate = useNavigate();
@@ -41,14 +42,23 @@ const MainHeader = () => {
     i18n.changeLanguage(value);
   };
 
+  const handleClickLogin = () => {
+    console.log('login');
+  };
+
   return (
     <Header
       ref={headerRef}
       style={{ height: isScrolled ? '60px' : '100px' }}
       className={`sticky top-0 z-50 transition-all duration-300 bg-white shadow-md`}
     >
-      <Row justify="space-between" className="h-full px-2.5">
-        <Col className="w-full h-full max-w-[1140px] p-2.5 mx-auto leading-none">
+      <Row
+        gutter={[6, 12]}
+        align={'middle'}
+        justify="space-between"
+        className="h-full px-2.5"
+      >
+        <Col className="w-full h-full max-w-[800px] p-2.5 mx-auto leading-none">
           <Image
             preview={false}
             src={HeaderLogo}
@@ -57,7 +67,7 @@ const MainHeader = () => {
             onClick={() => navigate(path.ROOT)}
           />
         </Col>
-        <Col className="fixed flex items-start gap-2 top-[15px] right-[15px] z-50">
+        <Col className="flex items-start gap-2">
           <div
             className="leading-6 flex gap-[5px] justify-center items-center cursor-pointer"
             onClick={() => handleChangeLanguage('en')}
@@ -76,6 +86,16 @@ const MainHeader = () => {
               VI
             </span>
           </div>
+        </Col>
+        <Col>
+          <Button
+            type="text"
+            className="text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
+            onClick={handleClickLogin}
+          >
+            <LoginOutlined />
+            Đăng nhập
+          </Button>
         </Col>
       </Row>
     </Header>
