@@ -17,7 +17,7 @@ const initialState: IRetailInitialState = {
 };
 
 export const uploadRetailVisit = createAsyncThunk(
-  'uploadRetailVisit',
+  'retailVisit/uploadRetailVisit',
   async (data: IUploadRetailVisit) => {
     const { onSuccess, ...others } = data;
     const result = await RetailVisitApis.uploadRetailVisit(others);
@@ -32,8 +32,10 @@ export const uploadRetailVisit = createAsyncThunk(
 );
 
 export const findAllRetailVisit = createAsyncThunk(
-  'findAllRetailVisit',
+  'retailVisit/findAllRetailVisit',
   async (params: IFilterFindAll) => {
+    console.log(params);
+
     return await RetailVisitApis.findAll(params);
   },
 );
