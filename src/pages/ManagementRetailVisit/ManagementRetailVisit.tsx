@@ -15,7 +15,6 @@ import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { HocChangePagination } from 'utils/PaginationChange';
 import '../../i18n/index';
-import { inputNumberPatern } from 'utils/constants/constants';
 
 const spanCol = 8;
 
@@ -161,7 +160,7 @@ const ManagementRetailVisit = () => {
       findAllRetailVisit({
         officeLocation: values?.location,
         stimulusProduct: values?.product,
-        phoneNumber: '0763',
+        ...values,
       }),
     );
   };
@@ -250,7 +249,7 @@ const ManagementRetailVisit = () => {
           pagination={{
             size: 'default',
             current: page,
-            total: retailVisits.items.length || 1,
+            total: retailVisits.items?.length ?? 1,
             pageSizeOptions: ['1', '2', '10'],
             showSizeChanger: true,
             onChange: HocChangePagination(),

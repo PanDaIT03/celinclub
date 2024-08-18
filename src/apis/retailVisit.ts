@@ -33,10 +33,35 @@ export interface IFilterFindAll {
   stimulusProduct?: string;
   visitDate?: string;
   phoneNumber?: string;
+  employeeName?: string;
 }
 
 export const RetailVisitApis = {
   findAll: async (params: IFilterFindAll): Promise<IRetailVisitData> => {
+    console.log({
+      orderBy: orderBy('visitDate', 'desc'),
+      ...(params.officeLocation && {
+        officeLocationWhere: where(
+          'officeLocation',
+          '==',
+          params.officeLocation,
+        ),
+      }),
+      ...(params.stimulusProduct && {
+        stimulusProductWhere: where(
+          'stimulusProductIds',
+          'array-contains',
+          params.stimulusProduct,
+        ),
+      }),
+      ...(params.phoneNumber && {
+        phoneNumberWhere: where('phoneNumber', '==', params.phoneNumber),
+      }),
+      ...(params.employeeName && {
+        employeeNameWhere: where('employeeName', '==', params.employeeName),
+      }),
+    });
+
     const conditions = Object.values({
       orderBy: orderBy('visitDate', 'desc'),
       // ...(params.pagination &&
@@ -60,12 +85,12 @@ export const RetailVisitApis = {
           'array-contains',
           params.stimulusProduct,
         ),
-        ...(params.phoneNumber && {
-          phoneNumberStartAt: startAt(params.phoneNumber),
-        }),
-        ...(params.phoneNumber && {
-          phoneNumberEndAt: endAt(params.phoneNumber + '\uf8ff'),
-        }),
+      }),
+      ...(params.phoneNumber && {
+        phoneNumberWhere: where('phoneNumber', '==', params.phoneNumber),
+      }),
+      ...(params.employeeName && {
+        employeeNameWhere: where('fullName', '==', params.employeeName),
       }),
     });
 
