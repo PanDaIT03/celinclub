@@ -4,7 +4,6 @@ import Admin from 'pages/Admin/Admin';
 import Home from 'pages/Home/Home';
 import ProtectedRoute from 'pages/Root';
 import path from './path';
-import Admin from 'pages/Admin/Admin';
 
 const Router = () => {
   const routes = [
@@ -18,16 +17,6 @@ const Router = () => {
         },
         {
           path: `${path.ADMIN}`,
-          element: <Admin />,
-        },
-      ],
-    },
-    {
-      path: `${path.ADMIN}`,
-      element: <ProtectedRoute />,
-      children: [
-        {
-          path: ``,
           element: <Admin />,
         },
       ],
