@@ -34,6 +34,8 @@ export const uploadRetailVisit = createAsyncThunk(
 export const findAllRetailVisit = createAsyncThunk(
   'findAllRetailVisit',
   async (params: IFilterFindAll) => {
+    console.log(params);
+
     return await RetailVisitApis.findAll(params);
   },
 );

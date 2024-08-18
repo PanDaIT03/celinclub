@@ -3,10 +3,12 @@ import dayjs from 'dayjs';
 import {
   addDoc,
   collection,
+  endAt,
   getCountFromServer,
   getDocs,
   orderBy,
   query,
+  startAt,
   Timestamp,
   where,
 } from 'firebase/firestore';
@@ -30,6 +32,7 @@ export interface IFilterFindAll {
   officeLocation?: string;
   stimulusProduct?: string;
   visitDate?: string;
+  phoneNumber?: string;
 }
 
 export const RetailVisitApis = {
@@ -57,20 +60,12 @@ export const RetailVisitApis = {
           'array-contains',
           params.stimulusProduct,
         ),
-        // ...(params.visitDate && {
-        //   where: where('visitDate', '>=', timestamp),
-        // ...(params.visitDate && {
-        //   where: where('visitDate', '>=', () => {
-        //     console.log(params.visitDate);
-
-        //     if (!params.visitDate) return;
-
-        //     const date = new Date(params.visitDate);
-        //     const timestamp = Timestamp.fromDate(date);
-
-        //     return timestamp;
-        //   }),
-        // }),
+        ...(params.phoneNumber && {
+          phoneNumberStartAt: startAt(params.phoneNumber),
+        }),
+        ...(params.phoneNumber && {
+          phoneNumberEndAt: endAt(params.phoneNumber + '\uf8ff'),
+        }),
       }),
     });
 

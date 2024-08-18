@@ -160,6 +160,7 @@ const ManagementRetailVisit = () => {
       findAllRetailVisit({
         officeLocation: values?.location,
         stimulusProduct: values?.product,
+        phoneNumber: '0763',
       }),
     );
   };
