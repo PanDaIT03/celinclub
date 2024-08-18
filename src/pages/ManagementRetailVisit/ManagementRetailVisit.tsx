@@ -1,4 +1,4 @@
-import { Button, Col, Form, Row, Table } from 'antd';
+import { Button, Col, Form, Input, Row, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnType } from 'antd/es/table';
@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { IFilterFindAll } from 'apis/retailVisit';
 import { FilterIcon, FilterWhiteIcon } from 'assets/svg';
 import SelectForm from 'components/Select/SelectForm';
 import useQueryParam from 'hooks/useQueryParam';
-import { findAllRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { HocChangePagination } from 'utils/PaginationChange';
@@ -24,6 +24,7 @@ const ManagementRetailVisit = () => {
   const dispatch = useAppDispatch();
 
   const { t: t_admin } = useTranslation('admin');
+  const { t: t_title } = useTranslation('title');
   const { t: t_form, i18n } = useTranslation('form');
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
@@ -50,6 +51,12 @@ const ManagementRetailVisit = () => {
   }, []);
 
   useEffect(() => {
+    console.log(t_title('Management Title'));
+
+    document.title = t_title('Management Title');
+  }, [t_title, i18n]);
+
+  useEffect(() => {
     const options: DefaultOptionType[] = products.map((product) => ({
       label: product.name,
       value: product.id,
@@ -57,8 +64,6 @@ const ManagementRetailVisit = () => {
 
     setProductOptions(options);
   }, [products]);
-
-  console.log(retailVisits);
 
   useEffect(() => {
     setAddressOptions([
@@ -148,26 +153,18 @@ const ManagementRetailVisit = () => {
   const onFilter = (values?: any) => {
     navigate(`?page=1&page_size=${pageSize}`);
 
-    dispatch(
-      findAllRetailVisit({
-        officeLocation: values?.location,
-        stimulusProduct: values?.product,
-      }),
-    );
+    const formatedValues: IFilterFindAll = {
+      employeeName: values?.employeeName?.trim(),
+      phoneNumber: values?.phoneNumber?.trim(),
+      officeLocation: values?.location?.trim(),
+      stimulusProduct: values?.product?.trim(),
+    };
+    console.log(formatedValues);
+    // dispatch(findAllRetailVisit({ ...formatedValues }));
   };
 
   return (
     <Row gutter={[8, 16]} justify={'end'} className="p-5 mt-3">
-      <Row align={'middle'}>
-        <Col>
-          <Button
-            onClick={() => setIsOpenFilter(!isOpenFilter)}
-            className={`${isOpenFilter ? 'bg-[#00538f] hover:!bg-[#00538f]' : 'bg-white'}`}
-          >
-            {isOpenFilter ? <FilterWhiteIcon /> : <FilterIcon />}
-          </Button>
-        </Col>
-      </Row>
       <Form
         form={form}
         size="small"
@@ -176,11 +173,39 @@ const ManagementRetailVisit = () => {
         onFinish={onFilter}
         className={`w-full bg-white rounded-lg shadow-md p-4 ${isOpenFilter ? 'block' : 'hidden'}`}
       >
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+        <Row gutter={{ xs: 8, sm: 24, md: 24, lg: 32 }}>
+          <Col span={spanCol} className="h-[80px]">
+            <Form.Item
+              name="phoneNumber"
+              label={t_admin('Employee Mobile Number')}
+            >
+              <Input
+                allowClear={true}
+                name="phoneNumber"
+                className="h-[40px] rounded-md"
+                placeholder={t_admin('placeHolder.Phone Number')}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={spanCol} className="h-[80px]">
+            <Form.Item
+              name="employeeName"
+              label={t_admin('Employee Full Name')}
+            >
+              <Input
+                allowClear={true}
+                name="employeeName"
+                className="h-[40px] rounded-md"
+                placeholder={t_admin('placeHolder.Employee Name')}
+              />
+            </Form.Item>
+          </Col>
           <Col span={spanCol} className="h-[80px]">
             <Form.Item label={t_admin('Office Location')} name="location">
               <SelectForm
+                size="middle"
                 options={addressOptions}
+                className="h-[40px] rounded-md"
                 placeholder={t_admin('placeHolder.Office Location')}
               />
             </Form.Item>
@@ -188,7 +213,9 @@ const ManagementRetailVisit = () => {
           <Col span={spanCol} className="h-[80px]">
             <Form.Item label={t_admin('Cellulite Products')} name="product">
               <SelectForm
+                size="middle"
                 options={productOptions}
+                className="h-[40px] rounded-md"
                 placeholder={t_admin('placeHolder.Cellulite Products')}
               />
             </Form.Item>
@@ -223,9 +250,19 @@ const ManagementRetailVisit = () => {
           rowKey={(record) => record.id}
           rowClassName={(_, index) => (index % 2 !== 0 ? 'even-row' : '')}
           title={() => (
-            <p className="text-[14px] leading-[22.4px] font-bold">
-              {t_admin('Visit List')}
-            </p>
+            <Row justify={'space-between'} align={'middle'}>
+              <Col className="text-[14px] leading-[22.4px] font-bold">
+                {t_admin('Visit List')}
+              </Col>
+              <Col>
+                <Button
+                  onClick={() => setIsOpenFilter(!isOpenFilter)}
+                  className={`${isOpenFilter ? 'bg-[#00538f] hover:!bg-[#00538f]' : 'bg-white'}`}
+                >
+                  {isOpenFilter ? <FilterWhiteIcon /> : <FilterIcon />}
+                </Button>
+              </Col>
+            </Row>
           )}
           pagination={{
             size: 'default',

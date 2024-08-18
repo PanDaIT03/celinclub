@@ -34,19 +34,16 @@ import {
 import BackToTop from 'components/BackToTop/BackToTop';
 import FormComp from 'components/Form/Form';
 import SelectForm from 'components/Select/SelectForm';
+import dayjs from 'dayjs';
+import { Timestamp } from 'firebase/firestore';
 import Banner from 'layouts/Banner';
 import { uploadRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { IRetailVisit } from 'types/retailVisit';
+import { inputNumberPatern } from 'utils/constants/constants';
 import { icons } from 'utils/constants/icons';
 import '../../i18n/index';
-import {
-  convertStringToTimestamp,
-  inputNumberPatern,
-} from 'utils/constants/constants';
-import dayjs from 'dayjs';
-import { Timestamp } from 'firebase/firestore';
 
 type InputFormProps = {
   label: string;
@@ -104,6 +101,7 @@ const { TextArea } = Input,
 const Home = () => {
   const { t, i18n } = useTranslation('form');
   const { t: t_home } = useTranslation('home');
+  const { t: t_title } = useTranslation('title');
 
   const dispatch = useAppDispatch();
   const [form] = useForm<IRetailVisit>();
@@ -121,6 +119,10 @@ const Home = () => {
     dispatch(getStimulusProducts());
     form.setFieldValue('officeLocation', 'Nhà máy/ Factory');
   }, []);
+
+  useEffect(() => {
+    document.title = t_title('Title');
+  }, [t, i18n]);
 
   useEffect(() => {
     setAddressOptions([
