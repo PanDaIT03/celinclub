@@ -12,7 +12,7 @@ function Admin() {
   );
 
   useEffect(() => {
-    dispatch(findAllRetailVisit());
+    dispatch(findAllRetailVisit({}));
   }, []);
 
   console.log(retailVisits);
