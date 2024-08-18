@@ -29,7 +29,7 @@ const Root = () => {
         zIndex: 1000,
       }}
     >
-      <Layout className="bg-white min-h-screen mt-0">
+      <Layout className="min-h-screen mt-0">
         <MainHeader />
         <Outlet />
       </Layout>

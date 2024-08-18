@@ -12,17 +12,11 @@ const Router = () => {
       element: <ProtectedRoute />,
       children: [
         {
-          path: ``,
+          path: '',
           element: <Home />,
         },
-      ],
-    },
-    {
-      path: `${path.ADMIN}`,
-      element: <ProtectedRoute />,
-      children: [
         {
-          path: ``,
+          path: `${path.ADMIN}`,
           element: <Admin />,
         },
       ],
