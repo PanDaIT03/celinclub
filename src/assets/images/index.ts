@@ -12,3 +12,4 @@ export { default as Tydol_Women } from './Tydol_Women.jpg';
 export { default as Ameflu_Orange } from './Ameflu_Orange.jpg';
 export { default as Ameflu_Green } from './Ameflu_Green.jpg';
 export { default as Ame_Bismo } from './Ame_Bismo.png';
+export { default as Filter_Icon } from './icons8-filter-32.png';
