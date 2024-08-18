@@ -16,7 +16,7 @@ const Admin = () => {
   );
 
   useEffect(() => {
-    dispatch(findAllRetailVisit());
+    dispatch(findAllRetailVisit({}));
   }, []);
 
   const columns: ColumnType[] = [
