@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 interface IRetailVisit {
   fullName: string;
   phoneNumber: string;
@@ -5,7 +7,7 @@ interface IRetailVisit {
   retailerName: string;
   retailerPhoneNumber: string;
   retailerAddress?: string;
-  visitDate?: string;
+  visitDate?: Timestamp | string;
   stimulusProductIds: string[];
   feedback: string;
   upload: { file: any; fileList: UploadFile<any>[] };

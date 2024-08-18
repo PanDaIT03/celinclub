@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import Admin from 'pages/Admin/Admin';
 import Home from 'pages/Home/Home';
+import ManagementRetailVisit from 'pages/ManagementRetailVisit/ManagementRetailVisit';
 import ProtectedRoute from 'pages/Root';
 import path from './path';
 
@@ -16,8 +16,8 @@ const Router = () => {
           element: <Home />,
         },
         {
-          path: `${path.ADMIN}`,
-          element: <Admin />,
+          path: `${path.MANAGEMENTRETAILVISIT}`,
+          element: <ManagementRetailVisit />,
         },
       ],
     },

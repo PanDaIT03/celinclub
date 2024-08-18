@@ -1,7 +1,6 @@
 const path = {
   ROOT: '/',
-  // HOME: '/home',
-  ADMIN: '/admin',
+  MANAGEMENTRETAILVISIT: '/management-retail-visit',
 };
 
 export default path;

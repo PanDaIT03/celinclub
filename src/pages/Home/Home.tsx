@@ -13,7 +13,6 @@ import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { UploadChangeParam, UploadFile } from 'antd/es/upload';
 import Dragger from 'antd/es/upload/Dragger';
-import dayjs from 'dayjs';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -39,9 +38,15 @@ import Banner from 'layouts/Banner';
 import { uploadRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
-import { inputNumberPatern } from 'utils/constants/constants';
+import { IRetailVisit } from 'types/retailVisit';
 import { icons } from 'utils/constants/icons';
 import '../../i18n/index';
+import {
+  convertStringToTimestamp,
+  inputNumberPatern,
+} from 'utils/constants/constants';
+import dayjs from 'dayjs';
+import { Timestamp } from 'firebase/firestore';
 
 type InputFormProps = {
   label: string;
@@ -277,13 +282,13 @@ const Home = () => {
     ];
   }, [t, fileList, form, productOptions, addressOptions]);
 
-  const handleSubmit = (values: IRetailVisit) => {
+  const handleSubmit = (values: any) => {
     dispatch(
       uploadRetailVisit({
         ...values,
-        visitDate: dayjs(values.visitDate).isValid()
-          ? dayjs(values.visitDate).format('DD/MM/YYYY')
-          : dayjs(new Date()).format('DD/MM/YYYY'),
+        visitDate: Timestamp.fromDate(
+          new Date(dayjs(values.visitDate).format('DD/MM/YYYY')),
+        ),
         onSuccess: () => {
           setFileList([]);
           form.resetFields();

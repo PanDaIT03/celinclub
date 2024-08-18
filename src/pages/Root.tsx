@@ -10,11 +10,19 @@ const Root = () => {
   const { loading } = useSelector((state: RootState) => state.retailVisit);
 
   useEffect(() => {
-    if (loading) document.body.style.overflow = 'hidden';
+    if (loading) {
+      const scrollPosition = window.scrollY;
 
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
+      const preventScroll = () => {
+        window.scrollTo(0, scrollPosition);
+      };
+
+      window.addEventListener('scroll', preventScroll);
+
+      return () => {
+        window.removeEventListener('scroll', preventScroll);
+      };
+    }
   }, [loading]);
 
   return (
