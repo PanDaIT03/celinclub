@@ -1,11 +1,13 @@
 import { Row, Table } from 'antd';
 import { ColumnType } from 'antd/es/table';
+import useQueryParam from 'hooks/useQueryParam';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import { findAllRetailVisit } from 'state/reducers/retailVisit';
 import { RootState, useAppDispatch } from 'state/store';
+import { HocChangePagination } from 'utils/PaginationChange';
 
 const Admin = () => {
   const dispatch = useAppDispatch();
@@ -15,9 +17,27 @@ const Admin = () => {
     (state: RootState) => state.retailVisit,
   );
 
+  const queryParam = useQueryParam(),
+    page = parseInt(queryParam.get('page') + '') || 1,
+    pageSize = parseInt(queryParam.get('page_size') + '') || 10;
+
   useEffect(() => {
-    dispatch(findAllRetailVisit({}));
+    const { items } = retailVisits;
+
+    dispatch(
+      findAllRetailVisit({
+        // pagination: {
+        //   pageSize: pageSize,
+        //   startAfter: items[items.length - 1],
+        // },
+        // officeLocation: 'Văn phòng HCM/ HCM Office',
+        visitDate: '29/08/2024',
+      }),
+    );
   }, []);
+  // }, [page, pageSize]);
+
+  console.log(retailVisits);
 
   const columns: ColumnType[] = [
     {
@@ -39,7 +59,7 @@ const Admin = () => {
       render: (value) => value || '-',
     },
     {
-      width: 100,
+      width: 150,
       dataIndex: 'officeLocation',
       title: t('Office Location'),
       render: (value) => value || '-',
@@ -51,7 +71,7 @@ const Admin = () => {
       render: (value) => value || '-',
     },
     {
-      width: 220,
+      width: 250,
       dataIndex: 'retailerPhoneNumber',
       title: t('Retailer Contact Number'),
       render: (value) => value || '-',
@@ -64,7 +84,7 @@ const Admin = () => {
     },
     {
       width: 150,
-      dataIndex: 'stimulusProductIds',
+      dataIndex: ['stimulusProducts'],
       title: 'Sản phẩm kích cầu',
       render: (value) => value || '-',
     },
@@ -75,14 +95,12 @@ const Admin = () => {
       render: (value) => value || '-',
     },
     {
-      width: 170,
+      width: 300,
       dataIndex: 'upload',
       title: 'Ảnh NT / Hóa đơn / SP đã mua',
       render: (value) => value || '-',
     },
   ];
-
-  console.log(retailVisits);
 
   return (
     <div className="p-5 mt-3">
@@ -90,9 +108,18 @@ const Admin = () => {
         <Table
           className="w-full"
           columns={columns}
-          scroll={{ x: 2000 }}
+          dataSource={retailVisits.items}
+          scroll={{ x: 2100 }}
           rowKey={(record) => record.id}
           title={() => <p>Danh sách</p>}
+          pagination={{
+            // current: 1,
+            pageSize: 10,
+            total: retailVisits.pageInfo?.totalItems,
+            pageSizeOptions: ['1', '2', '10'],
+            showSizeChanger: true,
+            onChange: HocChangePagination(),
+          }}
         />
       </Row>
     </div>

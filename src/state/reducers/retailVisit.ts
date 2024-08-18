@@ -3,18 +3,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IFilterFindAll, RetailVisitApis } from 'apis/retailVisit';
 import { toast } from 'config/toast';
 
-type IRetailInitialState = {
-  data: IRetailVisit[];
-} & IInitialState;
-
 const initialState: IRetailInitialState = {
-  data: [],
+  data: {
+    items: [],
+    pageInfo: {} as IPageInfo,
+  },
   loading: false,
 };
-
-type IUploadRetailVisit = {
-  onSuccess?: () => void;
-} & IRetailVisit;
 
 export const uploadRetailVisit = createAsyncThunk(
   'uploadRetailVisit',

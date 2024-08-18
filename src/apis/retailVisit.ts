@@ -1,16 +1,20 @@
 import { UploadFile } from 'antd';
+import dayjs from 'dayjs';
 import {
   addDoc,
   collection,
+  getCountFromServer,
   getDocs,
-  limit,
+  orderBy,
   query,
-  startAfter,
+  Timestamp,
+  where,
 } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 
 import { firestoreDatabase } from 'config/firebase';
 import { toast } from 'config/toast';
+import { StimulusProductApis } from './stimulusProduct';
 
 export interface IFilterFindAll {
   pagination?: {
@@ -19,19 +23,48 @@ export interface IFilterFindAll {
   };
   officeLocation?: string;
   stimulusProduct?: string;
+  visitDate: string;
 }
 
 export const RetailVisitApis = {
-  findAll: async (params: IFilterFindAll): Promise<IRetailVisit[]> => {
+  findAll: async (params: IFilterFindAll): Promise<IRetailVisitData> => {
+    const date = new Date(params.visitDate);
+    const timestamp = Timestamp.fromDate(date);
+
     const conditions = Object.values({
-      ...(params.pagination &&
-        params.pagination.startAfter && {
-          startAfter: startAfter(params.pagination.startAfter),
+      orderBy: orderBy('visitDate', 'desc'),
+      // ...(params.pagination &&
+      //   params.pagination.startAfter && {
+      //     startAfter: startAfter(params.pagination.startAfter),
+      //   }),
+      // ...(params.pagination &&
+      //   params.pagination.pageSize && {
+      //     limit: limit(params.pagination.pageSize),
+      //   }),
+      ...(params.officeLocation && {
+        where: where('officeLocation', '==', params.officeLocation),
+      }),
+      ...(params.stimulusProduct && {
+        where: where(
+          'stimulusProductIds',
+          'array-contains',
+          params.stimulusProduct,
+        ),
+        ...(params.visitDate && {
+          where: where('visitDate', '>=', timestamp),
+          // ...(params.visitDate && {
+          //   where: where('visitDate', '>=', () => {
+          //     console.log(params.visitDate);
+
+          //     if (!params.visitDate) return;
+
+          //     const date = new Date(params.visitDate);
+          //     const timestamp = Timestamp.fromDate(date);
+
+          //     return timestamp;
+          //   }),
         }),
-      ...(params.pagination &&
-        params.pagination.pageSize && {
-          limit: limit(params.pagination.pageSize),
-        }),
+      }),
     });
 
     try {
@@ -40,18 +73,48 @@ export const RetailVisitApis = {
         ...conditions,
       );
       const querySnapshot = await getDocs(q);
+      const stimulusProducts = await StimulusProductApis.getAll();
+      const pageInfo = await getCountFromServer(
+        collection(firestoreDatabase, 'retailVisit'),
+      );
 
-      return querySnapshot.docs.map((doc) => {
-        const data = doc.data() as IRetailVisit;
+      const items = querySnapshot.docs.map((doc) => {
+        const data = doc.data() as TRetailVisit;
+        const visitDate = dayjs(
+          (data.visitDate as unknown as Timestamp).toDate(),
+        ).isValid()
+          ? dayjs((data.visitDate as unknown as Timestamp).toDate()).format(
+              'DD/MM/YYYY',
+            )
+          : undefined;
 
         return {
           id: doc.id,
           ...data,
+          visitDate: visitDate,
+          stimulusProducts: stimulusProducts
+            .filter((product) =>
+              doc
+                .data()
+                .stimulusProductIds.some((id: string) => id === product.id),
+            )
+            .map((item) => item.name)
+            .join(', '),
         };
       });
+
+      return {
+        items: items,
+        pageInfo: {
+          currentPage: 1,
+          itemsPerPage: params.pagination?.pageSize,
+          totalItems: pageInfo.data().count,
+        },
+      };
     } catch (error: any) {
+      console.log(error);
       toast.error(error);
-      return [];
+      return {} as IRetailVisitData;
     }
   },
   uploadRetailVisit: async (data: IRetailVisit) => {
