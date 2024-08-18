@@ -1,19 +1,27 @@
+import { LoginOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { HeaderLogo } from 'assets/images';
 import { EN_Flag, VI_Flag } from 'assets/svg';
 import Icon from 'components/Icon/Icon';
+import { useSelector } from 'react-redux';
+import { signInWithGooglePopup, signOut } from 'state/reducers/user';
+import { RootState, useAppDispatch } from 'state/store';
 import '../../i18n/index';
 import path from '../../routes/path';
-import { LoginOutlined } from '@ant-design/icons';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from 'config/firebase';
 
 const MainHeader = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const headerRef = useRef<any>(null);
+
+  const { user } = useSelector((state: RootState) => state.user);
 
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
@@ -24,6 +32,18 @@ const MainHeader = () => {
   useEffect(() => {
     setIsViLanguage(currentLanguage === 'vi');
   }, [currentLanguage]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log('User logged in:', currentUser);
+      } else {
+        console.log('User not logged in');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,9 +62,17 @@ const MainHeader = () => {
     i18n.changeLanguage(value);
   };
 
-  const handleClickLogin = () => {
-    console.log('login');
-  };
+  const handleClickLogin = useCallback(() => {
+    if (typeof user === 'undefined') {
+      dispatch(signInWithGooglePopup());
+      return;
+    }
+
+    navigate(path.ROOT);
+    dispatch(signOut());
+  }, [user]);
+
+  console.log(user);
 
   return (
     <Header
@@ -93,8 +121,17 @@ const MainHeader = () => {
             className="text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
             onClick={handleClickLogin}
           >
-            <LoginOutlined />
-            Đăng nhập
+            {typeof user === 'undefined' ? (
+              <>
+                <LoginOutlined />
+                Đăng nhập
+              </>
+            ) : (
+              <>
+                <LoginOutlined />
+                Đăng xuất
+              </>
+            )}
           </Button>
         </Col>
       </Row>

@@ -7,10 +7,15 @@ import MainHeader from 'layouts/Header/MainHeader';
 import { RootState } from 'state/store';
 
 const Root = () => {
-  const { loading } = useSelector((state: RootState) => state.retailVisit);
+  const { loading: retailVisitLoading } = useSelector(
+    (state: RootState) => state.retailVisit,
+  );
+  const { loading: userLoading } = useSelector(
+    (state: RootState) => state.user,
+  );
 
   useEffect(() => {
-    if (loading) {
+    if (retailVisitLoading || userLoading) {
       const scrollPosition = window.scrollY;
 
       const preventScroll = () => {
@@ -23,11 +28,11 @@ const Root = () => {
         window.removeEventListener('scroll', preventScroll);
       };
     }
-  }, [loading]);
+  }, [retailVisitLoading || userLoading]);
 
   return (
     <Spin
-      spinning={loading}
+      spinning={retailVisitLoading || userLoading}
       tip="Loading..."
       style={{
         position: 'fixed',
