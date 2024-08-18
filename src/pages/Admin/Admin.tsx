@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
+import { FilterIcon, FilterWhiteIcon } from 'assets/svg';
 import SelectForm from 'components/Select/SelectForm';
 import { findAllRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
@@ -21,6 +22,8 @@ const Admin = () => {
 
   const { t: t_admin } = useTranslation('admin');
   const { t: t_form, i18n } = useTranslation('form');
+
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
 
   const [addressOptions, setAddressOptions] = useState<DefaultOptionType[]>([]);
   const [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
@@ -156,14 +159,24 @@ const Admin = () => {
   };
 
   return (
-    <div className="p-5 mt-3">
+    <Row gutter={[8, 16]} justify={'end'} className="p-5 mt-3">
+      <Row align={'middle'}>
+        <Col>
+          <Button
+            onClick={() => setIsOpenFilter(!isOpenFilter)}
+            className={`${isOpenFilter ? 'bg-[#00538f] hover:!bg-[#00538f]' : 'bg-white'}`}
+          >
+            {isOpenFilter ? <FilterWhiteIcon /> : <FilterIcon />}
+          </Button>
+        </Col>
+      </Row>
       <Form
         form={form}
         size="small"
         layout="vertical"
         autoComplete="off"
         onFinish={onFilter}
-        className="w-full bg-white rounded-lg shadow-md p-4 mb-5"
+        className={`w-full bg-white rounded-lg shadow-md p-4 ${isOpenFilter ? 'block' : 'hidden'}`}
       >
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
           <Col span={spanCol} className="h-[80px]">
@@ -210,7 +223,11 @@ const Admin = () => {
           scroll={{ x: 2100 }}
           className="w-full p-4"
           rowKey={(record) => record.id}
-          title={() => <p>Danh sách</p>}
+          title={() => (
+            <p className="text-[14px] leading-[22.4px] font-bold">
+              {t_admin('Visit List')}
+            </p>
+          )}
           pagination={{
             // current: 1,
             pageSize: 10,
@@ -221,7 +238,7 @@ const Admin = () => {
           }}
         />
       </Row>
-    </div>
+    </Row>
   );
 };
 
