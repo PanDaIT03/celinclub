@@ -8,6 +8,9 @@ interface IRetailVisit {
   retailerPhoneNumber: string;
   retailerAddress?: string;
   visitDate?: Timestamp | string;
+  createDate?: Timestamp | string;
+  createIdBy?: string;
+  createNameBy?: string;
   stimulusProductIds: string[];
   feedback: string;
   upload: { file: any; fileList: UploadFile<any>[] };

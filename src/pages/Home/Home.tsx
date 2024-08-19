@@ -107,8 +107,9 @@ const Home = () => {
   const [form] = useForm<IRetailVisit>();
 
   const { data: stimulusProducts } = useSelector(
-    (state: RootState) => state.stimulusProduct,
-  );
+      (state: RootState) => state.stimulusProduct,
+    ),
+    { user } = useSelector((state: RootState) => state.user);
 
   const [fileList, setFileList] = useState<UploadFile<any>[]>([]),
     [addressOptions, setAddressOptions] = useState<DefaultOptionType[]>([]),
@@ -284,23 +285,45 @@ const Home = () => {
     ];
   }, [t, fileList, form, productOptions, addressOptions]);
 
-  const handleSubmit = (values: any) => {
-    dispatch(
-      uploadRetailVisit({
+  const handleSubmit = useCallback(
+    (values: any) => {
+      console.log({
         ...values,
         visitDate: Timestamp.fromDate(
           values.visitDate
             ? dayjs(values.visitDate, 'DD/MM/YYYY').toDate()
             : new Date(),
         ),
+        ...(user && { createBy: user.id }),
+        ...(user && { createDate: Timestamp.fromDate(new Date()) }),
         onSuccess: () => {
           setFileList([]);
           form.resetFields();
           form.setFieldValue('officeLocation', 'Nhà máy/ Factory');
         },
-      }),
-    );
-  };
+      });
+
+      dispatch(
+        uploadRetailVisit({
+          ...values,
+          visitDate: Timestamp.fromDate(
+            values.visitDate
+              ? dayjs(values.visitDate, 'DD/MM/YYYY').toDate()
+              : new Date(),
+          ),
+          ...(user && { createIdBy: user.id }),
+          ...(user && { createNameBy: user.displayName }),
+          ...(user && { createDate: Timestamp.fromDate(new Date()) }),
+          onSuccess: () => {
+            setFileList([]);
+            form.resetFields();
+            form.setFieldValue('officeLocation', 'Nhà máy/ Factory');
+          },
+        }),
+      );
+    },
+    [user],
+  );
 
   return (
     <>

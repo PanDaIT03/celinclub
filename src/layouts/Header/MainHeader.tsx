@@ -3,15 +3,13 @@ import { Button, Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { HeaderLogo } from 'assets/images';
 import { EN_Flag, VI_Flag } from 'assets/svg';
 import Icon from 'components/Icon/Icon';
-import { auth } from 'config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { useSelector } from 'react-redux';
-import { signInWithGooglePopup, signOut } from 'state/reducers/user';
+import { signIn, signInWithGooglePopup, signOut } from 'state/reducers/user';
 import { RootState, useAppDispatch } from 'state/store';
 import '../../i18n/index';
 import path from '../../routes/path';
@@ -37,16 +35,16 @@ const MainHeader = () => {
   }, [currentLanguage]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        console.log('User logged in:', currentUser);
-      } else {
-        console.log('User not logged in');
-      }
-    });
+    const userJSON = localStorage.getItem('currentUser');
 
-    return () => unsubscribe();
+    if (userJSON === null) return;
+
+    dispatch(signIn(JSON.parse(userJSON) as IUser));
+
+    if (user?.role === 'admin') navigate(path.MANAGEMENTRETAILVISIT);
   }, []);
+
+  console.log(user);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,15 +65,13 @@ const MainHeader = () => {
 
   const handleClickLogin = useCallback(() => {
     if (typeof user === 'undefined') {
-      dispatch(signInWithGooglePopup());
+      dispatch(signInWithGooglePopup({ navigate }));
       return;
     }
 
     navigate(path.ROOT);
     dispatch(signOut());
   }, [user]);
-
-  console.log(user);
 
   return (
     <Header
