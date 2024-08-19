@@ -34,22 +34,24 @@ const ManagementRetailVisit = () => {
   const [productOptions, setProductOptions] = useState<DefaultOptionType[]>([]);
 
   const { data: retailVisits } = useSelector(
-    (state: RootState) => state.retailVisit,
-  );
-
-  const { data: products } = useSelector(
-    (state: RootState) => state.stimulusProduct,
-  );
+      (state: RootState) => state.retailVisit,
+    ),
+    { user } = useSelector((state: RootState) => state.user),
+    { data: products } = useSelector(
+      (state: RootState) => state.stimulusProduct,
+    );
 
   const queryParam = useQueryParam(),
     page = parseInt(queryParam.get('page') + '') || 1,
     pageSize = parseInt(queryParam.get('page_size') + '') || 10;
 
   useEffect(() => {
+    if (typeof user === 'undefined' || user?.role !== 'admin') return;
+
     i18n.reloadResources();
     onFilter();
     dispatch(getStimulusProducts());
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     document.title = t_title('Management Title');

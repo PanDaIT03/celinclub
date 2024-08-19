@@ -313,7 +313,7 @@ const Home = () => {
           ),
           ...(user && { createIdBy: user.id }),
           ...(user && { createNameBy: user.displayName }),
-          ...(user && { createDate: Timestamp.fromDate(new Date()) }),
+          createDate: Timestamp.fromDate(new Date()),
           onSuccess: () => {
             setFileList([]);
             form.resetFields();

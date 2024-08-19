@@ -6,4 +6,10 @@ service cloud.firestore {
       allow read, write;
     }
   }
+
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write;
+    }
+  }
 }
