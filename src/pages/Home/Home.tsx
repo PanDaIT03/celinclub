@@ -290,7 +290,9 @@ const Home = () => {
       console.log({
         ...values,
         visitDate: Timestamp.fromDate(
-          new Date(dayjs(values.visitDate).format('DD/MM/YYYY')),
+          values.visitDate
+            ? dayjs(values.visitDate, 'DD/MM/YYYY').toDate()
+            : new Date(),
         ),
         ...(user && { createBy: user.id }),
         ...(user && { createDate: Timestamp.fromDate(new Date()) }),

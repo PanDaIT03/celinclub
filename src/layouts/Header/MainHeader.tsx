@@ -1,10 +1,10 @@
-import { LoginOutlined, MailOutlined } from '@ant-design/icons';
+import { LoginOutlined } from '@ant-design/icons';
 import { Button, Col, Image, Menu, MenuProps, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { HeaderLogo } from 'assets/images';
 import { EN_Flag, VI_Flag } from 'assets/svg';
@@ -17,10 +17,12 @@ import path from '../../routes/path';
 type MenuItem = Required<MenuProps>['items'][number];
 
 const MainHeader = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const headerRef = useRef<any>(null);
+  const isAdminPage = location.pathname.startsWith('/management');
 
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
@@ -129,25 +131,26 @@ const MainHeader = () => {
               </span>
             </div>
           </div>
-          <div>
-            {user ? (
-              <Menu
-                items={items}
-                mode="horizontal"
-                // style={{ height: '60px' }}
-                className="min-w-[129px] h-[60px] text-sm font-bold !border-0"
-              />
-            ) : (
-              <Button
-                type="text"
-                icon={<LoginOutlined />}
-                className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
-                onClick={handleClickLogin}
-              >
-                {t('Sign in')}
-              </Button>
-            )}
-          </div>
+          {isAdminPage && (
+            <div>
+              {user ? (
+                <Menu
+                  items={items}
+                  mode="horizontal"
+                  className="min-w-[129px] h-[60px] text-sm font-bold !border-0"
+                />
+              ) : (
+                <Button
+                  type="text"
+                  icon={<LoginOutlined />}
+                  className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
+                  onClick={handleClickLogin}
+                >
+                  {t('Sign in')}
+                </Button>
+              )}
+            </div>
+          )}
         </Col>
       </Row>
     </Header>
