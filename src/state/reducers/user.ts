@@ -39,6 +39,7 @@ export const signInWithGooglePopup = createAsyncThunk(
 
       if (userDoc.data()?.role === 'admin')
         navigate(path.MANAGEMENTRETAILVISIT);
+      else navigate(path.ROOT);
 
       localStorage.setItem(
         'currentUser',

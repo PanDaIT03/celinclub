@@ -1,15 +1,15 @@
 import { LoginOutlined } from '@ant-design/icons';
 import { Col, Image, Menu, MenuProps, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';F
+import { useNavigate } from 'react-router-dom';
 
 import { HeaderLogo } from 'assets/images';
 import { EN_Flag, VI_Flag } from 'assets/svg';
 import Icon from 'components/Icon/Icon';
-import { signIn, signInWithGooglePopup, signOut } from 'state/reducers/user';
+import { signIn, signOut } from 'state/reducers/user';
 import { RootState, useAppDispatch } from 'state/store';
 import '../../i18n/index';
 import path from '../../routes/path';
@@ -61,16 +61,6 @@ const MainHeader = () => {
   const handleChangeLanguage = (value: string) => {
     i18n.changeLanguage(value);
   };
-
-  const handleClickLogin = useCallback(() => {
-    if (typeof user === 'undefined') {
-      dispatch(signInWithGooglePopup({ navigate }));
-      return;
-    }
-
-    navigate(path.ROOT);
-    dispatch(signOut());
-  }, [user]);
 
   const handleClickSignOut = () => {
     navigate(path.ROOT);

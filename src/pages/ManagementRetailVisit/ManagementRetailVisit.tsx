@@ -16,6 +16,7 @@ import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { HocChangePagination } from 'utils/PaginationChange';
 import '../../i18n/index';
+import path from 'routes/path';
 
 const spanCol = 8;
 
@@ -46,7 +47,15 @@ const ManagementRetailVisit = () => {
     pageSize = parseInt(queryParam.get('page_size') + '') || 10;
 
   useEffect(() => {
-    if (typeof user === 'undefined' || user?.role !== 'admin') return;
+    if (typeof user === 'undefined') {
+      navigate(path.SIGNIN);
+      return;
+    }
+
+    if (user && user?.role !== 'admin') {
+      navigate(path.ROOT);
+      return;
+    }
 
     i18n.reloadResources();
     onFilter();

@@ -1,13 +1,19 @@
 import { Button, Image } from 'antd';
 import { useTranslation } from 'react-i18next';
-import '../../i18n/index';
+import { useNavigate } from 'react-router-dom';
+
 import { GOOGLE_LOGO } from 'assets/images';
+import { signInWithGooglePopup } from 'state/reducers/user';
+import { useAppDispatch } from 'state/store';
+import '../../i18n/index';
 
 const SignIn = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { t } = useTranslation('signIn');
 
   const handleClickSignIn = () => {
-    console.log('sign in');
+    dispatch(signInWithGooglePopup({ navigate }));
   };
 
   return (
