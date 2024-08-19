@@ -1,5 +1,5 @@
-import { LoginOutlined, MailOutlined } from '@ant-design/icons';
-import { Button, Col, Image, Menu, MenuProps, Row } from 'antd';
+import { LoginOutlined } from '@ant-design/icons';
+import { Col, Image, Menu, MenuProps, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,10 +17,12 @@ import path from '../../routes/path';
 type MenuItem = Required<MenuProps>['items'][number];
 
 const MainHeader = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  // const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const headerRef = useRef<any>(null);
+  // const isAdminPage = location.pathname.startsWith('/management');
 
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
@@ -70,17 +72,22 @@ const MainHeader = () => {
     dispatch(signOut());
   }, [user]);
 
+  const handleClickSignOut = () => {
+    navigate(path.ROOT);
+    dispatch(signOut());
+  };
+
   const items: MenuItem[] = useMemo(() => {
     return [
       {
         key: 'user',
-        label: user?.displayName,
+        label: <p className="leading-[60px]">{user?.displayName}</p>,
         children: [
           {
             key: 'logOut',
             icon: <LoginOutlined />,
             label: <span className="text-sm font-bold">{t('Sign out')}</span>,
-            onClick: handleClickLogin,
+            onClick: handleClickSignOut,
           },
         ],
       },
@@ -129,24 +136,33 @@ const MainHeader = () => {
               </span>
             </div>
           </div>
-          <div>
-            {user ? (
-              <Menu
-                items={items}
-                mode="horizontal"
-                className="min-w-[129px] h-[60px] text-sm font-bold !border-0"
-              />
-            ) : (
-              <Button
-                type="text"
-                icon={<LoginOutlined />}
-                className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
-                onClick={handleClickLogin}
-              >
-                {t('Sign in')}
-              </Button>
-            )}
-          </div>
+          {user && (
+            <Menu
+              items={items}
+              mode="horizontal"
+              className="min-w-[129px] h-[60px] text-sm font-bold !border-0"
+            />
+          )}
+          {/* {isAdminPage && (
+            <div>
+              {user ? (
+                <Menu
+                  items={items}
+                  mode="horizontal"
+                  className="min-w-[129px] h-[60px] text-sm font-bold !border-0"
+                />
+              ) : (
+                <Button
+                  type="text"
+                  icon={<LoginOutlined />}
+                  className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
+                  onClick={handleClickLogin}
+                >
+                  {t('Sign in')}
+                </Button>
+              )}
+            </div>
+          )} */}
         </Col>
       </Row>
     </Header>

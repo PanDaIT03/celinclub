@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Home from 'pages/Home/Home';
 import ManagementRetailVisit from 'pages/ManagementRetailVisit/ManagementRetailVisit';
 import ProtectedRoute from 'pages/Root';
+import SignIn from 'pages/SignIn/SignIn';
 import path from './path';
 
 const Router = () => {
@@ -14,6 +15,10 @@ const Router = () => {
         {
           path: '',
           element: <Home />,
+        },
+        {
+          path: `${path.SIGNIN}`,
+          element: <SignIn />,
         },
         {
           path: `${path.MANAGEMENTRETAILVISIT}`,
