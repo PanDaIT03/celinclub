@@ -1,4 +1,5 @@
-import { Col, Image, Row } from 'antd';
+import { LoginOutlined } from '@ant-design/icons';
+import { Button, Col, Image, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,14 +19,15 @@ import path from '../../routes/path';
 const MainHeader = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const headerRef = useRef<any>(null);
 
-  const { user } = useSelector((state: RootState) => state.user);
+  const headerRef = useRef<any>(null);
 
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
   const { t } = useTranslation('header');
+
+  const { user } = useSelector((state: RootState) => state.user);
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isViLanguage, setIsViLanguage] = useState(true);
@@ -87,12 +89,12 @@ const MainHeader = () => {
         justify="space-between"
         className="h-full px-2.5"
       >
-        <Col className="w-full h-full max-w-[800px] p-2.5 mx-auto leading-none">
+        <Col className="w-full h-full max-w-[300px] p-2.5 mx-auto leading-none">
           <Image
             preview={false}
             src={HeaderLogo}
             height={'100%'}
-            className="max-h-[148px] max-w-[500px] object-contain cursor-pointer"
+            className="max-h-[148px] max-w-[300px] object-contain cursor-pointer"
             onClick={() => navigate(path.ROOT)}
           />
         </Col>
@@ -116,25 +118,22 @@ const MainHeader = () => {
             </span>
           </div>
         </Col>
-        {/* <Col>
+        <Col>
           <Button
             type="text"
+            icon={
+              typeof user === 'undefined' ? (
+                <LoginOutlined />
+              ) : (
+                <LoginOutlined />
+              )
+            }
             className="min-w-[129px] text-sm font-bold hover:!text-[#00538f] hover:!bg-transparent"
             onClick={handleClickLogin}
           >
-            {typeof user === 'undefined' ? (
-              <>
-                <LoginOutlined />
-                {t('Sign in')}
-              </>
-            ) : (
-              <>
-                <LoginOutlined />
-                Đăng xuất
-              </>
-            )}
+            {typeof user === 'undefined' ? t('Sign in') : t('Sign out')}
           </Button>
-        </Col> */}
+        </Col>
       </Row>
     </Header>
   );
