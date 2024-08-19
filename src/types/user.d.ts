@@ -4,6 +4,7 @@ interface IUser {
   role: string;
   displayName: string;
   photoURL: string;
+  exists?: any;
 }
 
 type IFindById = IUser & DocumentSnapshot<DocumentData, DocumentData>;

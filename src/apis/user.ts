@@ -24,7 +24,6 @@ export const UserApis = {
   },
   save: async (data: IUser) => {
     const { id, ...others } = data;
-    console.log(data);
 
     await setDoc(doc(firestoreDatabase, 'users', id), { ...others });
   },
