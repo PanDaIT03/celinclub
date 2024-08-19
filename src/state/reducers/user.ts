@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
-import { auth } from 'config/firebase';
+import { auth, firestoreDatabase } from 'config/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { NavigateFunction } from 'react-router-dom';
+
+import { UserApis } from 'apis/user';
+import path from 'routes/path';
+import { toast } from 'config/toast';
 
 type TUserInitialState = {
   user?: IUser;
@@ -16,18 +21,36 @@ const googleProvider = new GoogleAuthProvider();
 
 export const signInWithGooglePopup = createAsyncThunk(
   'user/signInWithGooglePopup',
-  async () => {
+  async ({ navigate }: { navigate: NavigateFunction }) => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      console.log('User signed in:', user);
+      const userDoc = await getDoc(doc(firestoreDatabase, 'users', user.uid));
+      const currentUser = {
+        displayName: user?.displayName ?? '',
+        email: user?.email ?? '',
+        photoURL: user?.photoURL ?? '',
+        ...userDoc.data(),
+        id: user.uid,
+      } as IUser;
 
-      // Optional: Bạn có thể lưu thông tin người dùng vào Firestore nếu cần
-      //   const userRef = doc(db, "users", user.uid);
-      // await setDoc(userRef, { email: user.email, name: user.displayName });
-      return user as IUser;
+      if (!userDoc.exists())
+        await UserApis.save({ ...currentUser, role: 'user' });
+
+      if (userDoc.data()?.role === 'admin')
+        navigate(path.MANAGEMENTRETAILVISIT);
+
+      localStorage.setItem(
+        'currentUser',
+        JSON.stringify({
+          ...currentUser,
+          accessToken: await user.getIdToken(),
+        }),
+      );
+
+      return currentUser;
     } catch (error: any) {
-      console.error('Error signing in with Google:', error?.message ?? error);
+      toast.error('Error signing in with Google:', error?.message ?? error);
       return undefined;
     }
   },
@@ -39,6 +62,10 @@ const userSlice = createSlice({
   reducers: {
     signOut: (state) => {
       state.user = undefined;
+      localStorage.removeItem('currentUser');
+    },
+    signIn: (state, action) => {
+      state.user = action.payload;
     },
   },
   extraReducers(builder) {
@@ -56,4 +83,4 @@ const userSlice = createSlice({
 });
 
 export const { reducer: userReducer } = userSlice;
-export const { signOut } = userSlice.actions;
+export const { signOut, signIn } = userSlice.actions;

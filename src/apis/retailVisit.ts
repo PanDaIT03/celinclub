@@ -108,16 +108,22 @@ export const RetailVisitApis = {
           typeof data.visitDate !== 'undefined'
             ? convertTimestampToString(data.visitDate)
             : undefined;
+        const createDateFormatted =
+          typeof data.createDate !== 'string' &&
+          typeof data.createDate !== 'undefined'
+            ? convertTimestampToString(data.createDate)
+            : undefined;
 
         return {
           id: doc.id,
           ...data,
           visitDate: dataFormatted,
+          createDate: createDateFormatted,
           stimulusProducts: stimulusProducts
             .filter((product) =>
-              doc
-                .data()
-                .stimulusProductIds.some((id: string) => id === product.id),
+              (doc.data()?.stimulusProductIds ?? []).some(
+                (id: string) => id === product.id,
+              ),
             )
             .map((item) => item.name)
             .join(', '),

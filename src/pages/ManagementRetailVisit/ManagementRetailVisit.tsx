@@ -139,6 +139,20 @@ const ManagementRetailVisit = () => {
       render: (value) => value || '-',
     },
     {
+      width: 100,
+      dataIndex: 'createNameBy',
+      title: 'Người tạo',
+      // title: t_admin('Visit Date'),
+      render: (value) => value || '-',
+    },
+    {
+      width: 100,
+      dataIndex: 'createDate',
+      title: 'Ngày tạo',
+      // title: t_admin('Visit Date'),
+      render: (value) => value || '-',
+    },
+    {
       width: 300,
       dataIndex: 'imageUrls',
       title: t_admin('Upload Retailer Photo'),
