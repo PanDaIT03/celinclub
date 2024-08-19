@@ -1,10 +1,10 @@
 import { LoginOutlined } from '@ant-design/icons';
-import { Button, Col, Image, Menu, MenuProps, Row } from 'antd';
+import { Col, Image, MenuProps, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { HeaderLogo } from 'assets/images';
 import { EN_Flag, VI_Flag } from 'assets/svg';
@@ -18,11 +18,11 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 const MainHeader = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const dispatch = useAppDispatch();
 
   const headerRef = useRef<any>(null);
-  const isAdminPage = location.pathname.startsWith('/management');
+  // const isAdminPage = location.pathname.startsWith('/management');
 
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language;
@@ -72,22 +72,22 @@ const MainHeader = () => {
     dispatch(signOut());
   }, [user]);
 
-  const items: MenuItem[] = useMemo(() => {
-    return [
-      {
-        key: 'user',
-        label: user?.displayName,
-        children: [
-          {
-            key: 'logOut',
-            icon: <LoginOutlined />,
-            label: <span className="text-sm font-bold">{t('Sign out')}</span>,
-            onClick: handleClickLogin,
-          },
-        ],
-      },
-    ];
-  }, [t, user]);
+  // const items: MenuItem[] = useMemo(() => {
+  //   return [
+  //     {
+  //       key: 'user',
+  //       label: user?.displayName,
+  //       children: [
+  //         {
+  //           key: 'logOut',
+  //           icon: <LoginOutlined />,
+  //           label: <span className="text-sm font-bold">{t('Sign out')}</span>,
+  //           onClick: handleClickLogin,
+  //         },
+  //       ],
+  //     },
+  //   ];
+  // }, [t, user]);
 
   return (
     <Header
@@ -131,7 +131,8 @@ const MainHeader = () => {
               </span>
             </div>
           </div>
-          {isAdminPage && (
+          {user && <div className="text-sm font-bold">{user.displayName}</div>}
+          {/* {isAdminPage && (
             <div>
               {user ? (
                 <Menu
@@ -150,7 +151,7 @@ const MainHeader = () => {
                 </Button>
               )}
             </div>
-          )}
+          )} */}
         </Col>
       </Row>
     </Header>
