@@ -1,5 +1,5 @@
 import { LoginOutlined } from '@ant-design/icons';
-import { Col, Image, MenuProps, Row } from 'antd';
+import { Col, Image, Menu, MenuProps, Row } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -72,22 +72,27 @@ const MainHeader = () => {
     dispatch(signOut());
   }, [user]);
 
-  // const items: MenuItem[] = useMemo(() => {
-  //   return [
-  //     {
-  //       key: 'user',
-  //       label: user?.displayName,
-  //       children: [
-  //         {
-  //           key: 'logOut',
-  //           icon: <LoginOutlined />,
-  //           label: <span className="text-sm font-bold">{t('Sign out')}</span>,
-  //           onClick: handleClickLogin,
-  //         },
-  //       ],
-  //     },
-  //   ];
-  // }, [t, user]);
+  const handleClickSignOut = () => {
+    navigate(path.ROOT);
+    dispatch(signOut());
+  };
+
+  const items: MenuItem[] = useMemo(() => {
+    return [
+      {
+        key: 'user',
+        label: <p className="leading-[60px]">{user?.displayName}</p>,
+        children: [
+          {
+            key: 'logOut',
+            icon: <LoginOutlined />,
+            label: <span className="text-sm font-bold">{t('Sign out')}</span>,
+            onClick: handleClickSignOut,
+          },
+        ],
+      },
+    ];
+  }, [t, user]);
 
   return (
     <Header
@@ -131,7 +136,13 @@ const MainHeader = () => {
               </span>
             </div>
           </div>
-          {user && <div className="text-sm font-bold">{user.displayName}</div>}
+          {user && (
+            <Menu
+              items={items}
+              mode="horizontal"
+              className="min-w-[129px] h-[60px] text-sm font-bold !border-0"
+            />
+          )}
           {/* {isAdminPage && (
             <div>
               {user ? (
