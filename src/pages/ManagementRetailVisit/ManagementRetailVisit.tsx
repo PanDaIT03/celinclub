@@ -52,8 +52,6 @@ const ManagementRetailVisit = () => {
   }, []);
 
   useEffect(() => {
-    console.log(t_title('Management Title'));
-
     document.title = t_title('Management Title');
   }, [t_title, i18n]);
 
@@ -91,13 +89,13 @@ const ManagementRetailVisit = () => {
       render: (_: any, __: any, index: number) => index + 1,
     },
     {
-      width: 150,
+      width: 170,
       dataIndex: 'fullName',
       title: t_admin('Employee Full Name'),
       render: (value) => value || '-',
     },
     {
-      width: 170,
+      width: 220,
       dataIndex: 'phoneNumber',
       title: t_admin('Employee Mobile Number'),
       render: (value) => value || '-',
@@ -179,11 +177,11 @@ const ManagementRetailVisit = () => {
     navigate(`?page=1&page_size=${pageSize}`);
 
     const formatedValues: IFilterFindAll = {
+      ...values,
       employeeName: values?.employeeName?.trim(),
       phoneNumber: values?.phoneNumber?.trim(),
       officeLocation: values?.location?.trim(),
       stimulusProduct: values?.product?.trim(),
-      ...values,
     };
 
     dispatch(findAllRetailVisit({ ...formatedValues }));
