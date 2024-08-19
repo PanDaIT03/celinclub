@@ -96,7 +96,10 @@ const MainHeader = () => {
         justify="space-between"
         className="h-full px-2.5"
       >
-        <Col className="w-full h-full max-w-[300px] p-2.5 leading-none">
+        <Col
+          span={12}
+          className="w-full h-full max-w-[300px] p-2.5 leading-none"
+        >
           <Image
             preview={false}
             src={HeaderLogo}
@@ -105,7 +108,7 @@ const MainHeader = () => {
             onClick={() => navigate(path.ROOT)}
           />
         </Col>
-        <Col className="flex items-center">
+        <Col span={12} className="flex items-center justify-end flex-wrap">
           <div className="flex items-start gap-2">
             <div
               className="leading-6 flex gap-[5px] justify-center items-center cursor-pointer"
@@ -130,7 +133,7 @@ const MainHeader = () => {
             <Menu
               items={items}
               mode="horizontal"
-              className="min-w-[129px] h-[60px] text-sm font-bold !border-0"
+              className="text-end min-w-[129px] h-[60px] text-sm font-bold !border-0"
             />
           )}
           {/* {isAdminPage && (
