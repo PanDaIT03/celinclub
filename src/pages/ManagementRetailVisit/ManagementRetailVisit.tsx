@@ -141,15 +141,13 @@ const ManagementRetailVisit = () => {
     {
       width: 100,
       dataIndex: 'createNameBy',
-      title: 'Người tạo',
-      // title: t_admin('Visit Date'),
+      title: t_admin('Creator'),
       render: (value) => value || '-',
     },
     {
-      width: 100,
+      width: 150,
       dataIndex: 'createDate',
-      title: 'Ngày tạo',
-      // title: t_admin('Visit Date'),
+      title: t_admin('Date Created'),
       render: (value) => value || '-',
     },
     {
@@ -272,9 +270,9 @@ const ManagementRetailVisit = () => {
         <Table
           size="middle"
           columns={columns}
-          dataSource={retailVisits.items}
           scroll={{ x: 2100 }}
           className="w-full p-4"
+          dataSource={retailVisits.items}
           rowKey={(record) => record.id}
           rowClassName={(_, index) => (index % 2 !== 0 ? 'even-row' : '')}
           title={() => (
