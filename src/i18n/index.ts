@@ -16,6 +16,9 @@ import HEADER_VI from '../locales/vi/header.json';
 import TITLE_EN from '../locales/en/title.json';
 import TITLE_VI from '../locales/vi/title.json';
 
+import SIGNIN_EN from '../locales/en/signIn.json';
+import SIGNIN_VI from '../locales/vi/signIn.json';
+
 const resources = {
   en: {
     home: HOME_EN,
@@ -23,6 +26,7 @@ const resources = {
     admin: ADMIN_EN,
     header: HEADER_EN,
     title: TITLE_EN,
+    signIn: SIGNIN_EN,
   },
   vi: {
     home: HOME_VI,
@@ -30,6 +34,7 @@ const resources = {
     admin: ADMIN_VI,
     header: HEADER_VI,
     title: TITLE_VI,
+    signIn: SIGNIN_VI,
   },
 };
 
@@ -39,7 +44,7 @@ i18n.use(initReactI18next).init({
   resources,
   defaultNS,
   lng: 'vi',
-  ns: ['home', 'form', 'admin', 'header', 'title'],
+  ns: ['home', 'form', 'admin', 'header', 'title', 'signIn'],
   interpolation: {
     escapeValue: false,
   },
