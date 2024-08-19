@@ -47,12 +47,15 @@ const ManagementRetailVisit = () => {
     pageSize = parseInt(queryParam.get('page_size') + '') || 10;
 
   useEffect(() => {
-    if (typeof user === 'undefined') {
+    const userJSON = localStorage.getItem('currentUser');
+    if (userJSON === null) {
       navigate(path.SIGNIN);
       return;
     }
 
-    if (user && user?.role !== 'admin') {
+    const currentUser = JSON.parse(userJSON);
+
+    if (currentUser?.role !== 'admin') {
       navigate(path.ROOT);
       return;
     }
