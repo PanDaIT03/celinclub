@@ -1,7 +1,8 @@
-import { Button, Col, Form, Image, Input, Row, Table } from 'antd';
+import { Button, Col, DatePicker, Form, Image, Input, Row, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import { ColumnType } from 'antd/es/table';
+import { Timestamp } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -11,12 +12,13 @@ import { IFilterFindAll } from 'apis/retailVisit';
 import { FilterIcon, FilterWhiteIcon } from 'assets/svg';
 import SelectForm from 'components/Select/SelectForm';
 import useQueryParam from 'hooks/useQueryParam';
+import path from 'routes/path';
 import { findAllRetailVisit } from 'state/reducers/retailVisit';
 import { getStimulusProducts } from 'state/reducers/stimulusProduct';
 import { RootState, useAppDispatch } from 'state/store';
 import { HocChangePagination } from 'utils/PaginationChange';
 import '../../i18n/index';
-import path from 'routes/path';
+import dayjs from 'dayjs';
 
 const spanCol = 8;
 
@@ -190,12 +192,25 @@ const ManagementRetailVisit = () => {
   const onFilter = (values?: any) => {
     navigate(`?page=1&page_size=${pageSize}`);
 
+    const startOfDate =
+      dayjs(values?.date).isValid() && values?.date
+        ? dayjs(values?.date).startOf('day').toDate()
+        : undefined;
+    const endOfDate =
+      dayjs(values?.date).isValid() && values?.date
+        ? dayjs(values?.date).endOf('day').toDate()
+        : undefined;
+
     const formatedValues: IFilterFindAll = {
       ...values,
       employeeName: values?.employeeName?.trim(),
       phoneNumber: values?.phoneNumber?.trim(),
       officeLocation: values?.location?.trim(),
       stimulusProduct: values?.product?.trim(),
+      visitDate: {
+        startOfDate: startOfDate ? Timestamp.fromDate(startOfDate) : undefined,
+        endOfDate: endOfDate ? Timestamp.fromDate(endOfDate) : undefined,
+      },
     };
 
     dispatch(findAllRetailVisit({ ...formatedValues }));
@@ -255,6 +270,16 @@ const ManagementRetailVisit = () => {
                 options={productOptions}
                 className="h-[40px] rounded-md"
                 placeholder={t_admin('placeHolder.Cellulite Products')}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={spanCol} className="h-[80px]">
+            <Form.Item label={t_admin('Cellulite Products')} name="date">
+              <DatePicker
+                allowClear
+                placeholder="Chọn ngày"
+                className="h-[40px] rounded-md w-full"
+                format={{ format: 'DD/MM/YYYY' }}
               />
             </Form.Item>
           </Col>

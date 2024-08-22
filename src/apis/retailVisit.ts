@@ -6,6 +6,7 @@ import {
   getDocs,
   orderBy,
   query,
+  Timestamp,
   where,
 } from 'firebase/firestore';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
@@ -25,41 +26,18 @@ export interface IFilterFindAll {
     startAfter: IRetailVisit;
     pageSize: number;
   };
+  visitDate?: { startOfDate?: Timestamp; endOfDate?: Timestamp };
+  createDate?: string;
   phoneNumber?: string;
   employeeName?: string;
   officeLocation?: string;
   stimulusProduct?: string;
-  visitDate?: string;
 }
 
 export const RetailVisitApis = {
   findAll: async (params: IFilterFindAll): Promise<IRetailVisitData> => {
-    console.log({
-      orderBy: orderBy('visitDate', 'desc'),
-      ...(params.officeLocation && {
-        officeLocationWhere: where(
-          'officeLocation',
-          '==',
-          params.officeLocation,
-        ),
-      }),
-      ...(params.stimulusProduct && {
-        stimulusProductWhere: where(
-          'stimulusProductIds',
-          'array-contains',
-          params.stimulusProduct,
-        ),
-      }),
-      ...(params.phoneNumber && {
-        phoneNumberWhere: where('phoneNumber', '==', params.phoneNumber),
-      }),
-      ...(params.employeeName && {
-        employeeNameWhere: where('employeeName', '==', params.employeeName),
-      }),
-    });
-
     const conditions = Object.values({
-      orderBy: orderBy('visitDate', 'desc'),
+      orderBy: orderBy('createDate', 'desc'),
       // ...(params.pagination &&
       //   params.pagination.startAfter && {
       //     startAfter: startAfter(params.pagination.startAfter),
@@ -88,7 +66,19 @@ export const RetailVisitApis = {
       ...(params.employeeName && {
         employeeNameWhere: where('fullName', '==', params.employeeName),
       }),
+      ...(params.visitDate?.startOfDate && {
+        visitDateStartWhere: where(
+          'visitDate',
+          '>=',
+          params.visitDate.startOfDate,
+        ),
+      }),
+      ...(params.visitDate?.endOfDate && {
+        visitDateEndWhere: where('visitDate', '<=', params.visitDate.endOfDate),
+      }),
     });
+
+    console.log(conditions);
 
     try {
       const q = query(
