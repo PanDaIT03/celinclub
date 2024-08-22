@@ -274,12 +274,12 @@ const ManagementRetailVisit = () => {
             </Form.Item>
           </Col>
           <Col span={spanCol} className="h-[80px]">
-            <Form.Item label={t_admin('Cellulite Products')} name="date">
+            <Form.Item label={t_admin('Visit Date')} name="date">
               <DatePicker
-                allowClear
-                placeholder="Chọn ngày"
-                className="h-[40px] rounded-md w-full"
+                inputReadOnly={true}
                 format={{ format: 'DD/MM/YYYY' }}
+                className="h-[40px] rounded-md w-full"
+                placeholder={t_admin('placeHolder.Visit Date')}
               />
             </Form.Item>
           </Col>
